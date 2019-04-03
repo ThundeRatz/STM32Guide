@@ -260,7 +260,7 @@ aqui alguns mais fundamentais:
 
 Ao abri-lo pela primeira vez e escolher “New Project”, verá essa tela:
 
-<!-- Imagem Aqui -->
+![Cube new project](media/cube_new_project.png)
 
 Aqui você pode digitar o nome do microcontrolador usado na placa para qual
 você estará programando, nesse documento, será usado o STM32F303C6. Basta
@@ -268,13 +268,13 @@ clicar duas vezes no nome que aparece na lista inferior para selecionar.
 
 Após selecionado, a seguinte tela aparecerá:
 
-<!-- Imagem Aqui -->
+![Cube main window](media/cube_main_window.png)
 
 Como pode ser visto, na parte superior existem alguns menus e 4 abas, a
 aba de Pinout e a de Configuration serão mostradas aos poucos ao longo do
 documento, a aba de clock normalmente só precisa ser mexida uma única vez:
 
-<!-- Imagem Aqui -->
+![Cube clock configuration](media/cube_clock_conf.png)
 
 Nessa tela, apenas mudamos o clock nesse quadrado que está em destaque,
 não faz muita diferença, mas costumamos deixar no máximo possível, para
@@ -299,13 +299,13 @@ primeiro, vá nas configurações, no menu do Projeto:
 Ao clicar, a seguinte tela aparecerá, raramente será necessário mexer nela
 novamente:
 
-<!-- Imagem Aqui -->
+![Cube project manager](media/cube_project_manager.png)
 
 Na aba Project, coloque um nome para o projeto para board e mude o
 Toolchain para Makefile, o template usado pela equipe está configurado
 para essa estrutura de código. Então vá na aba Code Generator:
 
-<!-- Imagem Aqui -->
+![Cube code generator section of project manager](media/cube_project_manager_code_generator.png)
 
 E marque a opção de gerar arquivos .c/.h separados para cada periférico.
 
@@ -313,7 +313,7 @@ Após isso, clique em OK e seu projeto estará configurado, agora, é
 possível gerar o código clicando na engrenagem no menu superior (o comando
 `make cube` também faz isso):
 
-<!-- Imagem Aqui -->
+![Cube generate code button](media/cube_generate_code_button.png)
 
 **Observação**: gere o código em algum lugar e copie apenas o arquivo
 board.ioc para a pasta cube do template.
@@ -322,7 +322,7 @@ board.ioc para a pasta cube do template.
 
 Ao gerar o código pelo Cube, vários arquivos e pastas serão criados:
 
-<!-- Imagem Aqui -->
+![Cube generated files](media/cube_generated_files.png)
 
 Não mexa nos arquivos gerados.
 
@@ -347,7 +347,7 @@ configurados como GPIO (input ou output). Para selecionar a função de um
 pino, basta clicar nele na primeira tela do Cube e na função desejada
 (serve para todas as funções):
 
-<!-- Imagem Aqui -->
+![Cube select GPIO pin function](media/cube_select_pin_function_gpio.png)
 
 Para a maioria dos usos de GPIO, apenas selecionar a função nessa lista é
 suficiente, após gerar o código novamente, é possível ver as mudanças nos
@@ -410,7 +410,7 @@ necessárias e nem todos os pinos podem executar todas as funções, isso é
 muito importante de checar na hora de projetar uma placa, para que todos os
 pinos tenham as funções desejadas.
 
-<!-- Imagem Aqui -->
+![Cube select ADC pin function](media/cube_select_pin_function_adc.png)
 
 Ao selecionar um pino como ADC (nesse caso PA0), ele ficará laranja,
 indicando que ainda faltam configurações a serem realizadas, na coluna ao
@@ -423,7 +423,7 @@ Após escolher um pino de ADC, é necessário ir na aba de configurações para
 terminar de configurá-lo, lá, na segunda coluna, aparecerá um botão “ADC”,
 e ao clicar nele aparecerá a seguinte tela:
 
-<!-- Imagem Aqui -->
+![Cube ADC configuration screen](media/cube_adc_config.png)
 
 Como dito, essa tela pode variar dependendo do uC e do pino escolhido,
 porque alguns uCs tem mais funcionalidades. Só é necessário mexer em
@@ -437,16 +437,21 @@ e colocar os canais lá, preferencialmente em ordem, e aumentar o Sampling
 Time para algo maior (não há um número definido). No fim, ficaria mais ou
 menos assim:
 
-<!-- Imagem Aqui -->
+![Cube ADC configuring 1](media/cube_adc_configuring_1.png)
+
+![Cube ADC configuring 2](media/cube_adc_configuring_2.png)
+
+![Cube ADC configuring 3](media/cube_adc_configuring_3.png)
+
+![Cube ADC configuring 4](media/cube_adc_configuring_4.png)
 
 Além disso, é necessário ligar as interrupções do ADC, na aba NVIC:
 
-
-<!-- Imagem Aqui -->
+![Cube ADC enable NVIC](media/cube_adc_nvic_enable.png)
 
 E adicionar o DMA na aba DMA:
 
-<!-- Imagem Aqui -->
+![Cube ADC add DMA](media/cube_adc_add_dma.png)
 
 Adicione a função `MX_ADC1_Init()` a main ou em alguma outra função de
 inicialização, as funções relacionadas ao adc estão no `stm32f3xx_hal_adc.c`.
@@ -533,7 +538,7 @@ As interrupções por mudança de estado são chamadas External Interrupts
 STM32 são capazes de gerar uma interrupção. Para isso ser possível, uma
 mesma interrupção é invocada por mais de um pino.
 
-<!-- Imagem aqui -->
+![Interrupt registers](media/interrupt_registers.png)
 
 Dessa forma, se os pinos PA**0** e PB**1** estiverem sendo usados, serão
 chamadas EXT0 e EXT1, respectivamente. Caso os pinos PA**0** e PB**0**
@@ -544,16 +549,16 @@ de estado.
 Para habilitar uma interrupção externa, selecione o pino e configure como
 GPIO_EXTIn, onde n é o número do pino correspondente.
 
-<!-- Imagem aqui -->
+![Cube select EXTI pin function](media/cube_select_pin_function_exti.png)
 
 Na aba *Configuration*, habilite a entrada correspondente no NVIC.
 
-<!-- Imagem aqui -->
+![Cube GPIO set EXTI NVIC](media/cube_gpio_set_exti_nvic.png)
 
 Na aba GPIO, configure quando o pino irá chamar a interrupção, na borda de
 subida (*low* -> *high*), de descida (*high* -> *low*), ou em ambas.
 
-<!-- Imagem aqui -->
+![Cube GPIO select mode](media/cube_gpio_select_mode.png)
 
 Essa é a toda a configuração necessária, pode-se agora gerar o código do
 projeto. No arquivo .c de sua preferência, devemos declarar a função
@@ -647,7 +652,7 @@ Na parte da esquerda em Pinout, vamos escolher um timer. Escolherei o timer
 2 (TIM2). Basta escolhermos a Clock Source como Internal Clock (não precisa
 setar um pino porque é totalmente interno).
 
-<!-- Imagem aqui -->
+![Cube Timer set clock source](media/cube_timer_set_internal_clock.png)
 
 Em Configuration, aparecerá a opção TIM2 em Control.
 
@@ -657,11 +662,11 @@ Clicando, vemos a configuração do timer. Como mencionado anteriormente,
 vamos deixar o Prescaler como 63, o Counter Mode como Up e o Counter Period
 como 99.
 
-<!-- Imagem aqui -->
+![Cube Timer configuration](media/cube_timer_config.png)
 
 Em NVIC Settings, vamos habilitar o interrupt.
 
-<!-- Imagem aqui -->
+![Cube Timer enable interrupt](media/cube_timer_interrupt_enable.png)
 
 Aperte OK. Em Clock Configuration, tenha certeza de que a frequência está
 em 64 MHz.
@@ -735,7 +740,7 @@ Começando pelo Cube, escolhemos um pino que tenha timer, como o PA8, e
 setamos como timer. No caso do PA8, é o canal 1 do timer 1 (TIM1_CH1). Ele
 fica amarelo porque faltam coisas a serem configuradas.
 
-<!-- Imagem aqui -->
+![Cube PWM set pin as timer](media/cube_pwm_set_pin_timer.png)
 
 Na parte ao lado esquerdo, encontramos as configurações do TIM1. Setamos a
 fonte de clock (Clock Source) como Internal Clock. Ou seja, vamos utilizar
@@ -746,13 +751,13 @@ microcontrolador e é importante para as contas que serão feitas na
 configuração da PWM. Em Channel 1, escolhemos a opção PWM Generation CH1.
 Com isso, o pino setado fica verde.
 
-<!-- Imagem aqui -->
+![Cube PWM set configurations 1](media/cube_pwm_set_config_1.png)
 
 Após ter feito isso, na aba Configuration apareceu, em Control, o TIM1.
 Clicando nele, abrimos as configurações do timer 1. Em Counter Settings,
 vamos alterar o Prescaler e o Counter Period.
 
-<!-- Imagem aqui -->
+![Cube PWM set configurations 2](media/cube_pwm_set_config_2.png)
 
 Prescaler é o valor que dividirá a frequência da fonte de clock (no nosso
 caso, o clock interno, com frequência de 64 MHz). Vale ressaltar que o
@@ -773,13 +778,13 @@ A frequência da PWM gerada é calculada por:
 Para facilitar as contas, vamos colocar 63 no Prescaler e 1000 no Counter
 Period. Como o clock é de 64 MHz, obtemos uma PWM com frequência de 1 kHz.
 
-<!-- Imagem aqui -->
+![Cube PWM set configurations 3](media/cube_pwm_set_config_3.png)
 
 Mais abaixo, em PWM Generation Channel 1, vamos mudar Fast Mode para
 Enable. Com isso, podemos apertar OK e concluímos a configuração da geração
 de  PWM no Cube. Podemos gerar o código.
 
-<!-- Imagem aqui -->
+![Cube PWM set configurations 4](media/cube_pwm_set_config_4.png)
 
 Antes de gerar, vamos configurar outra PWM no canal 2 do timer 1 para
 termos algo parecido com o que usamos nos robôs: uma PWM para o motor
@@ -788,12 +793,12 @@ Pinout e, na parte do lado esquerdo, em TIM1, escolher, em Channel 2, a
 opção PWM Generation CH2. Ao fazer isso, o pino PA9 no lado direito é
 setado como TIM1_CH2 automaticamente e fica verde.
 
-<!-- Imagem aqui -->
+![Cube PWM set configurations 5](media/cube_pwm_set_config_5.png)
 
 Como é o mesmo timer, basta ir nas configurações do TIM1 novamente na aba
 Configurations e, em PWM Generation Channel 2, setar Fast Mode para Enable.
 
-<!-- Imagem aqui -->
+![Cube PWM set configurations 6](media/cube_pwm_set_config_6.png)
 
 Precisamos adicionar a função `MX_TIM1_Init()` a main ou a alguma outra
 função de inicialização. Para que a saída de PWM seja gerada efetivamente,
@@ -861,13 +866,15 @@ colocamos a opção Input Capture direct mode. Com isso, os pinos PA8, PA9 e
 PA10 serão selecionados no Pinout na parte direita e estarão com a cor
 verde.
 
-<!-- Imagem aqui -->
+![Cube PPM read set configurations 1](media/cube_ppm_read_set_config_1.png)
 
 Na aba Configurations, apareceu em Control a opção TIM1.
 
 Clicando em TIM1, temos a configuração do timer 1. Utilizando o mesmo
 princípio da parte de geração de PPM, vamos setar o Prescaler como 63. O
 Counter Period precisa ser o valor máximo de 16 bits (65535).
+
+![Cube PPM read set configurations 2](media/cube_ppm_read_set_config_2.png)
 
 Descendo um pouco, vemos as configurações de Input Capture Channel 1,
 Channel 2 e Channel 3. Iremos mudar a Polarity Selection. Esse parâmetro de
@@ -878,7 +885,7 @@ passa de LOW para HIGH como quando passa de HIGH para LOW. Por isso,
 escolhemos Both Edges em Polarity Selection. Dependendo do microcontrolador,
 pode ser que a opção Both Edges não exista. Trataremos esse caso depois.
 
-<!-- Imagem aqui -->
+![Cube PPM read set configurations 3](media/cube_ppm_read_set_config_3.png)
 
 Na aba NVIC Settings, precisamos habilitar o interrupt.
 
@@ -887,7 +894,7 @@ terão outras opções. No primeiro caso, habilite o global interrupt. No
 segundo caso, habilite a opção de capture compare interrupt. Por exemplo,
 no caso do timer 1 desse microcontrolador:
 
-<!-- Imagem aqui -->
+![Cube PPM read enable interrupt](media/cube_ppm_read_enable_interrupt.png)
 
 Após isso, podemos apertar OK e gerar o código.
 
@@ -1013,18 +1020,15 @@ Para configurar o I²C no STMCubeMX, vá para a aba ao lado esquerdo na
 seção pinout e veja que há algumas opções que podem ser selecionadas(I2C1,
 I2C2, …). Clique na desejada e selecione a opção I2C:
 
-<!-- Imagem aqui -->
-
 Ao clicar na opção, observe que aparecem em dois pinos as descrições
 I2C1_SDA e I2C1_SCL, que são os barramentos de data e clock, respectivamente.
 
-<!-- Imagem aqui -->
+![Cube I2C set configurations 1](media/i2c_set_config_1.png)
 
 Na seção *Configuration* em *Connectivity* é possível configurar o I2C
 selecionado:
 
-<!-- Imagem aqui -->
-<!-- Imagem aqui -->
+![Cube I2C set configurations 2](media/i2c_set_config_2.png)
 
 Na tela acima é possível selecionar diversos parâmetros:
 
