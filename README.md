@@ -1327,7 +1327,7 @@ três números após o F, seguido de xx. Em `DEVICE_DEF`, o valor é o valor de
 `DEVICE_TYPE`, seguido de x e, geralmente, o caractere que estiver duas posições
 antes do x em `DEVICE`. No nosso exemplo:
 
-<!-- Imagem aqui -->
+![Cube microcontroller image](media/cube_microcontroller_image.png)
 
 Temos que `DEVICE_LD` é `STM32F303C6Tx`, `DEVICE` é `STM32F303C6`,
 `DEVICE_FAMILY` é `STM32F3xx`, `DEVICE_TYPE` é `STM32F303xx` e `DEVICE_DEF` é
