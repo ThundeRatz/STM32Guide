@@ -223,7 +223,19 @@ nesse documento também.
 
 A estrutura de pastas no template é a seguinte:
 
-<!-- Imagem aqui -->
+```
+├── cube
+│   └── stm32_project_template.ioc
+├── inc
+│   └── mcu.h
+├── LICENSE
+├── Makefile
+├── README.md
+├── src
+│   ├── main.c
+│   └── mcu.c
+└── uncrustify.cfg
+```
 
 Na pasta cube, ficará o projeto do Cube e os arquivos gerados ao gerar o código.
 Na pasta `inc` ficam os headers (arquivos .h) e na pasta `src`, os arquivos .c.
