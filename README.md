@@ -153,9 +153,9 @@ link](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
 
 Baixe a versão mais recente para seu sistema e execute o instalador.
 
-Após a instalação, coloque o local dos executáveis no Path [(Apêndice 2)](#colocando-caminhos-no-path). O local
-padrão no Windows é `C:\Program Files (x86)\GNU Tools Arm Embedded\7
-2018-q2-update\bin`.
+Após a instalação, coloque o local dos executáveis no Path [(Apêndice
+2)](#colocando-caminhos-no-path). O local padrão no Windows é `C:\Program Files
+(x86)\GNU Tools Arm Embedded\7 2018-q2-update\bin`.
 
 ### Instalação no Linux
 
@@ -167,8 +167,9 @@ $ tar xjvf gcc-arm-none-eabi-*.tar.bz2
 
 Mova a pasta gerada para qualquer lugar que desejar.
 
-Após a instalação é necessário colocar os executáveis no PATH [(Apêndice 2)](#colocando-caminhos-no-path). Eles
-estão na pasta bin, dentro da pasta extraída.
+Após a instalação é necessário colocar os executáveis no PATH [(Apêndice
+2)](#colocando-caminhos-no-path). Eles estão na pasta bin, dentro da pasta
+extraída.
 
 ## Make
 
@@ -216,7 +217,8 @@ STM32. É possível ver e apagar o conteúdo da memória flash, além de escreve
 arquivos binários. Para baixar, acesse [esse
 link](https://www.st.com/en/development-tools/stm32cubeprog.html).
 
-Após baixar e instalar, adicione o caminho do executável à variável PATH [(Apêndice 2)](#colocando-caminhos-no-path).
+Após baixar e instalar, adicione o caminho do executável à variável PATH
+[(Apêndice 2)](#colocando-caminhos-no-path).
 
 # STM32 Project Template
 
@@ -946,8 +948,8 @@ colocar 63 como prescaler aqui.
 O Counter Period é a resolução da PWM. Ou seja, o valor que será o duty cycle de
 100%. Se o Counter Period for 1000, por exemplo, o “duty cycle”irá variar de 0 a
 1000. Então, se a PWM for para um motor, no programa, setar uma velocidade de
-1000 significa colocar o motor em 100% da velocidade, 500 seria 50% da
-velocidade e assim por diante.
+      1000 significa colocar o motor em 100% da velocidade, 500 seria 50% da
+      velocidade e assim por diante.
 
 A frequência da PWM gerada é calculada por:
 
