@@ -153,9 +153,7 @@ link](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
 
 Baixe a versão mais recente para seu sistema e execute o instalador.
 
-<!-- LINK AQUI -->
-
-Após a instalação, coloque o local dos executáveis no Path (Apêndice 2). O local
+Após a instalação, coloque o local dos executáveis no Path [(Apêndice 2)](#colocando-caminhos-no-path). O local
 padrão no Windows é `C:\Program Files (x86)\GNU Tools Arm Embedded\7
 2018-q2-update\bin`.
 
@@ -169,9 +167,7 @@ $ tar xjvf gcc-arm-none-eabi-*.tar.bz2
 
 Mova a pasta gerada para qualquer lugar que desejar.
 
-<!-- LINK AQUI -->
-
-Após a instalação é necessário colocar os executáveis no PATH (Apêndice 2). Eles
+Após a instalação é necessário colocar os executáveis no PATH [(Apêndice 2)](#colocando-caminhos-no-path). Eles
 estão na pasta bin, dentro da pasta extraída.
 
 ## Make
@@ -180,9 +176,7 @@ Para poder compilar com mais facilidade, é necessário ter o make instalado.
 
 ### Instalação no Windows
 
-<!-- LINK AQUI -->
-
-Baixe pelo MSYS2 (Apêndice 3).
+Baixe pelo MSYS2 [(Apêndice 3)](#instalando-msys2-no-windows).
 
 ### Instalação no Linux
 
