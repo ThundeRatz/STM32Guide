@@ -211,7 +211,12 @@ Para baixar, acesse [esse link](https://code.visualstudio.com/)
 
 ## STM32 Cube Programmer
 
-<!-- Colocar aqui as coisas sobre o programmer -->
+O STM32CubeProgrammer é uma ferramenta para programar os microcontroladores
+STM32. É possível ver e apagar o conteúdo da memória flash, além de escrever os
+arquivos binários. Para baixar, acesse [esse
+link](https://www.st.com/en/development-tools/stm32cubeprog.html).
+
+Após baixar e instalar, adicione o caminho do executável à variável PATH [(Apêndice 2)](#colocando-caminhos-no-path).
 
 # STM32 Project Template
 
