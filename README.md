@@ -524,6 +524,136 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 Esse programa faz a média das 256 leituras de cada canal do adc e salva num
 vetor global chamado `line_sensor`.
 
+# UART e DMA
+
+Utilizamos UART em conjunto com DMA para fazer comunicação serial. Exemplos de uso na equipe são no Tracer e nos sumôs autônomos, que recebem dados pelo aplicativo por bluetooth.
+
+Começando pelo Cube. Primeiro, na parte esquerda de Pinout, na seção Connectivity, encontre o periférico USART1 e, na parte Mode da parte que abrir, escolha Mode Asynchronous. Ao fazer isso, os pinos PA10 e PA9 serão setados na parte da direita.
+
+![Cube UART configuring 1](media/cube_uart_configuring_1.png)
+
+Na parte Configuration abaixo, aparecem algumas opções. Em Parameter Settings, só precisamos mudar a Baud Rate para 9600 Bits/s.
+
+![Cube UART configuring 2](media/cube_uart_configuring_2.png)
+
+Em NVIC Settings, precisamos habilitar o USART1 global interrupt.
+
+![Cube UART configuring 3](media/cube_uart_configuring_3.png)
+
+Em DMA Settings, devemos clicar em Add. Aparecerá um campo escrito “Select”. Então, clicamos lá e selecionamos USART1_RX.
+Embaixo, em DMA Request Settings, devemos escolher Mode Circular. Certifique-se que Data Width está como Byte e, em Increment Address, Memory esteja selecionado.
+
+![Cube UART configuring 4](media/cube_uart_configuring_4.png)
+
+Com isso, podemos gerar o código.
+
+## Recebendo dados
+
+Precisamos adicionar a função de init do USART e a função de init do DMA na main ou em alguma função de inicialização.
+
+```c
+MX_DMA_Init();
+MX_USART1_UART_Init();
+```
+
+Agora dividiremos em dois casos: o caso em que o pacote de dados consiste de apenas 1 byte e o caso em que consiste de um número definido de bytes (maior que 1).
+
+### Pacote de 1 byte
+
+Para o caso em que o pacote de dados recebido pela serial é sempre de 1 byte, basta adicionarmos na main ou em alguma função de inicialização:
+
+```c
+uint8_t rx_data = 0;
+
+void serial_init(void) {
+    MX_DMA_Init();
+    MX_USART1_UART_Init();
+    HAL_UART_Receive_DMA(&huart1, &rx_data, 1);
+}
+```
+
+A variável rx_data será atualizada sempre que receber um byte.
+
+### Pacote de mais de 1 byte
+
+Para o caso em que o pacote de dados recebido pela serial é sempre de um tamanho fixo de bytes maior que 1, precisamos utilizar a função de callback para fazer o processamento do pacote. Por exemplo, vamos processar um pacote com informações sobre velocidade estruturado da seguinte forma:
+
+- O primeiro byte contém um valor que indica que é o começo do pacote, chamaremos de header. Esse valor será 255.
+- O segundo byte contém um valor que indica o sentido da velocidade da esquerda (0 para frente e 1 para trás).
+- O terceiro byte contém o valor da velocidade da esquerda (valor de 0 a 255).
+- O quarto byte contem um valor que indica o sentido da velocidade da direita, usando a mesma convenção do segundo byte.
+- O quinto byte contém o valor da velocidade da direita.
+- O sexto byte contém um valor que indica fim de um pacote. Chamaremos de tail. O valor será 254.
+
+A função de callback pode ser definida da seguinte forma:
+
+```c
+#define PACKET_SIZE 6
+
+typedef enum rx_packet_index {
+    RX_PACKET_HEADER_I = 0,
+    RX_PACKET_LEFT_DIRECTION_I,
+    RX_PACKET_LEFT_SPEED_I,
+    RX_PACKET_RIGHT_DIRECTION_I,
+    RX_PACKET_RIGHT_SPEED_I,
+    RX_PACKET_TAIL_I,
+} rx_packet_index_t;
+
+typedef enum rx_packet_byte {
+    RX_PACKET_HEADER = 0xFF,
+    RX_PACKET_TAIL = 0xFE,
+} rx_packet_byte_t;
+
+typedef enum rx_packet_status {
+    RX_STATUS_ERROR = 0,
+    RX_STATUS_SUCCESS = 1,
+} rx_packet_status_t;
+
+uint8_t rx_data[PACKET_SIZE] = {0};
+rx_packet_status_t packet_status = RX_STATUS_ERROR;
+
+int16_t speed_left = 0;
+int16_t speed_right = 0;
+
+void serial_init(void) {
+    MX_DMA_Init();
+    MX_USART1_UART_Init();
+    HAL_UART_Receive_DMA(&huart1, rx_data, PACKET_SIZE);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
+    if (huart->Instance != USART1) {
+        return;
+    }
+
+    if (rx_data[RX_PACKET_HEADER_I] != RX_PACKET_HEADER ||
+        rx_data[RX_PACKET_TAIL_I]   != RX_PACKET_TAIL) {
+        packet_status = RX_STATUS_ERROR;
+        return;
+    }
+
+    speed_left = rx_data[RX_PACKET_LEFT_DIRECTION_I] == 0
+                 ? rx_data[RX_PACKET_LEFT_SPEED_I]
+                 : -rx_data[RX_PACKET_RIGHT_SPEED_I];
+
+    speed_right = rx_data[RX_PACKET_RIGHT_DIRECTION_I] == 0
+                  ? rx_data[RX_PACKET_RIGHT_SPEED_I]
+                  : -rx_data[RX_PACKET_LEFT_SPEED_I];
+}
+```
+
+Note que primeiro checamos se header e tail estão corretos antes de atribuir os valores das velocidades.
+
+### Transmitindo dados
+
+É possível transmitir dados por UART utilizando interrupts ou DMA, porém, para nossas aplicações na equipe, basta simplesmente transmitirmos no momento que for necessário. Para transmitir, basta utilizar a seguinte função (desde que o UART tenha sido inicializado com MX_USART1_UART_Init):
+
+```c
+HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)
+```
+
+No primeiro argumento vai o endereço do handle do UART, no nosso caso, &huart1. No segundo argumento vai o vetor de bytes para ser transmitido. No terceiro argumento vai o tamanho desse vetor de dados. No quarto argumento vai o timeout, ou seja, o tempo que ficará tentando enviar os dados caso dê alguma falha na transmissão. A função retorna o estado, que pode ser HAL_TIMEOUT, HAL_OK ou HAL_BUSY.
+
 # Interrupções
 
 Interrupções são pequenas funções chamadas enquanto a rotina principal está
