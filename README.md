@@ -1,4 +1,4 @@
-(Imagem legal aqui)
+![STM32Guide logo](media/stm32guide.png)
 
 ---
 
