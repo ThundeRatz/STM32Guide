@@ -78,10 +78,10 @@ Extraia o .zip e execute o arquivo SetupSTM32CubeMX-X.X.X.exe (X.X.X é a
 versão). Siga as instruções da tela.
 
 É necessário colocar o local de instalação em uma nova variável de ambiente
-chamada `CUBE_PATH`. O local de instalação padrão é `C:\Program Files
-(x86)\STMicroelectronics\STM32Cube\STM32CubeMX`.
+chamada `CUBE_PATH`. O local de instalação padrão é `C:\Program
+Files\STMicroelectronics\STM32Cube\STM32CubeMX`.
 
-IMAGEM AQUI
+![Cube path](media/cube_path.png)
 
 ### Instalação no Linux
 
@@ -1359,22 +1359,22 @@ necessários nas pastas listadas no PATH do usuário e do sistema.
 Para alterar o PATH do Windows, aperte a tecla do Windows e digite “env” (de
 environment variables) que aparecerá a opção de editar as variáveis de ambiente.
 
-<!-- Imagem aqui -->
+![Cube set path 1](media/set_path_1.png)
 
 Na janela que abrir, clique em Variáveis de Ambiente.
 
-<!-- Imagem aqui -->
+![Cube set path 2](media/set_path_2.png)
 
 Localize a variável PATH e clique duas vezes:
 
-<!-- Imagem aqui -->
+![Cube set path 3](media/set_path_3.png)
 
 Aperte o botão New e digite no espaço em branco qual o caminho que deve ser
 adicionado. Se mais de um caminho deve ser adicionado, é possível colocá-los no
 mesmo espaço, separando-os com ponto e vírgula (recomenda-se colocar um caminho
 por vez, clicando em New a cada adição)
 
-<!-- Imagem aqui -->
+![Cube set path 4](media/set_path_4.png)
 
 É importante ressaltar que o sistema irá procurar nessas pastas na ordem que
 estão na variável Path. Ou seja, se duas dessas pastas possuírem algo com o
@@ -1472,11 +1472,11 @@ siga as instruções de instalação. Na etapa 5, quando utilizar o comando pacm
 (uma mensagem aparece no terminal). Feche-a e abra novamente, executando a etapa
 6.
 
-<!-- Imagem aqui -->
+![Instalando MSYS2 1](media/msys2_1.png)
 
 Ao ver essa mensagem, feche o terminal e abra novamente.
 
-<!-- Imagem aqui -->
+![Instalando MSYS2 2](media/msys2_2.png)
 
 Depois da etapa 6, instale as ferramentas de desenvolvimento que vamos precisar:
 gcc, make e git.
@@ -1496,7 +1496,7 @@ seção anterior. Deixe esse caminho como primeiro item na lista para ter
 prioridade sobre outras versões de gcc ou make que possam eventualmente existir
 no seu computador.
 
-<!-- Imagem aqui -->
+![Instalando MSYS2 3](media/msys2_3.png)
 
 Para verificar se a instalação foi feita corretamente, abra o Prompt de Comando
 do Windows e digite `gcc -v` para verificar se o gcc foi instalado e `make -v`
@@ -1504,7 +1504,7 @@ para verificar se o make foi instalado. A saída esperada no terminal ao executa
 esses comando são mostrados na imagem abaixo (podem haver algumas pequenas
 diferenças nas saídas).
 
-<!-- Imagem aqui -->
+![Instalando MSYS2 4](media/msys2_4.png)
 
 Se a saída no Prompt de Comando foi parecida com essa, pronto. Você terminou de
 instalar as ferramentas do MSYS2 que utilizamos.
