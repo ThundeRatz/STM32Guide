@@ -51,8 +51,9 @@ Este documento tem como objetivo explicar como é feita a programação de
 microcontroladores da STMicroelectronics, voltado especialmente para os robôs da
 equipe ThundeRatz que usam placas com esses microcontroladores.
 
-isso, e uma explicação de como programar algumas das principais funcionalidades
-desses microcontroladores.
+Nas próximas páginas serão apresentados os softwares necessários para isso, e
+uma explicação de como programar algumas das principais funcionalidades desses
+microcontroladores.
 
 # Requisitos
 
@@ -114,8 +115,8 @@ Tente executar o arquivo novamente.
 Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação
 do Cube nas configurações da shell que você utiliza. Na pasta deve conter o
 executável STM32CubeMX. O procedimento é similar a adicionar diretórios no PATH
-(Apêndice 2), mas com o nome da variável diferente e sem adicionar ao valor
-anterior da variável.
+[(Apêndice 2)](#colocando-caminhos-no-path), mas com o nome da variável
+diferente e sem adicionar ao valor anterior da variável.
 
 O local de instalação padrão é
 `/usr/local/STMicroelectronics/STM32Cube/STM32CubeMX`.
@@ -208,7 +209,7 @@ $ sudo apt install git
 
 ## Visual Studio Code
 
-Para baixar, acesse [esse link](https://code.visualstudio.com/)
+Para baixar, acesse [esse link](https://code.visualstudio.com/).
 
 ## STM32 Cube Programmer
 
@@ -325,9 +326,9 @@ nela novamente:
 
 ![Cube project manager](media/cube_project_manager.png)
 
-Na seção Project, coloque um nome para o projeto e mude o Toolchain para
-Makefile, o template usado pela equipe está configurado para essa estrutura de
-código.
+Na seção Project, coloque um nome para o projeto, cheque a opção "Do not
+generate the main()" e mude o Toolchain para Makefile, o template usado pela
+equipe está configurado para essa estrutura de código.
 
 ![Cube project section of project
 manager](media/cube_project_manager_project.png)
@@ -686,18 +687,18 @@ valores das velocidades.
 É possível transmitir dados por UART utilizando interrupts ou DMA, porém, para
 nossas aplicações na equipe, basta simplesmente transmitirmos no momento que for
 necessário. Para transmitir, basta utilizar a seguinte função (desde que o UART
-tenha sido inicializado com MX_USART1_UART_Init):
+tenha sido inicializado com `MX_USART1_UART_Init`):
 
 ```c
 HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 ```
 
-No primeiro argumento vai o endereço do handle do UART, no nosso caso, &huart1.
-No segundo argumento vai o vetor de bytes para ser transmitido. No terceiro
-argumento vai o tamanho desse vetor de dados. No quarto argumento vai o timeout,
-ou seja, o tempo que ficará tentando enviar os dados caso dê alguma falha na
-transmissão. A função retorna o estado, que pode ser HAL_TIMEOUT, HAL_OK ou
-HAL_BUSY.
+No primeiro argumento vai o endereço do handle do UART, no nosso caso,
+`&huart1`. No segundo argumento vai o vetor de bytes para ser transmitido. No
+terceiro argumento vai o tamanho desse vetor de dados. No quarto argumento vai o
+timeout, ou seja, o tempo que ficará tentando enviar os dados caso dê alguma
+falha na transmissão. A função retorna o estado, que pode ser `HAL_TIMEOUT`,
+`HAL_OK` ou `HAL_BUSY`.
 
 # Interrupções
 
@@ -1286,7 +1287,7 @@ void writeReg(uint8_t reg, uint8_t val) {
 ```
 
 Na função acima, o microcontrolador (master) faz comunicação pelo canal I2C1 com
-o sensor de distância (slave) que possui endereço padrão ADDRESS_DEFAULT e
+o sensor de distância (slave) que possui endereço padrão `ADDRESS_DEFAULT` e
 transmite dados de 2 bytes que são passados como parâmetro pelo usuário com um
 Timeout de 1000. Observe que a função `HAL_I2C_Master_Transmit` retorna uma flag
 `HAL_OK` para indicar se tudo ocorreu bem com a transmissão, se houver algum
