@@ -249,11 +249,8 @@ Na pasta cube, ficará o projeto do Cube e os arquivos gerados ao gerar o códig
 Na pasta `inc` ficam os headers (arquivos .h) e na pasta `src`, os arquivos .c.
 A forma de utilizar o Cube para esse template será explicada na próxima seção.
 
-Para gerar o código, utilizamos o comando `make cube`. No caso de um novo
-projeto de Cube, com o código gerado, precisamos copiar o corpo da função
-`SystemClock_Config()` gerada pelo Cube para `src/mcu.c`. Depois disso,
-utilizamos o comando `make prepare` para apagar os arquivos  do Cube
-desnecessários.
+Para gerar o código, utilizamos o comando `make cube`. Depois disso, utilizamos
+o comando `make prepare` para apagar os arquivos  do Cube desnecessários.
 
 No caso de estar pegando o código em um repositório que já utiliza esse
 template, precisamos, logo após o checkout ou o pull, executar os comandos `make
@@ -383,18 +380,13 @@ funções):
 Para a maioria dos usos de GPIO, apenas selecionar a função nessa lista é
 suficiente, após gerar o código novamente, é possível ver as mudanças nos
 arquivos, um arquivo gpio.c (e .h) foi criado, com apenas uma função de
-inicialização de GPIO – `MX_GPIO_Init()`, que também já é chamada
-automaticamente na main.
-
-```c
-File: main.c
-90:     /* Initialize all configured peripherals */
-91:     MX_GPIO_Init();
-```
+inicialização de GPIO – `MX_GPIO_Init()`. Essa função precisa ser chamada no
+início da main ou em alguma função de inicialização.
 
 Será possível perceber um padrão a partir de agora na parte de configurações,
 para praticamente todos os periféricos, toda configuração feita no Cube é
-convertida em uma função `MX_<>_Init()` que já é adicionada na main.
+convertida em uma função `MX_<>_Init()`, que precisa ser chamada no início do
+programa.
 
 As funções para manipulação das GPIO estão no arquivo `stm32f3xx_hal_gpio.c` na
 pasta Drivers, as principais são:
@@ -1220,7 +1212,7 @@ Na aba "NVIC Settings" é possível ativar as interrupções para I²C também, 
 isto não será utilizado neste tutorial.
 
 Após gerar o código, haverá um arquivo `i2c.c` e `i2c.h` que contém todas as
-configurações especificadas anteriormente no STMCubeMX. É necessária adicionar a
+configurações especificadas anteriormente no STMCubeMX. É necessário adicionar a
 função de inicialização `MX_I2C1_Init()` à main.c ou a alguma outra função de
 inicialização customizada.
 
@@ -1255,7 +1247,7 @@ Estas funções estão definidas em `stm32fxxx_hal_i2c.c`
 Os principais parâmetros são:
 
 * `*hi2c`: Ponteiro para o módulo I2C escolhido. No caso escolhido nos passos
-  acima é um &hi2c1.
+  acima é um `&hi2c1`.
 * `DevAddress`: endereço do slave que você quer se comunicar(disponível em
   datasheet do componente).
 * `*pData`: ponteiro(vetor) de dados que será enviado ou recebido.
