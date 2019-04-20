@@ -27,6 +27,7 @@
 - [HAL](#hal)
 - [GPIO](#gpio)
 - [ADC e DMA](#adc-e-dma)
+- [UART e DMA](#uart-e-dma)
 - [Interrupções](#interrup%C3%A7%C3%B5es)
   - [NVIC](#nvic)
   - [Interrupções externas](#interrup%C3%A7%C3%B5es-externas)
