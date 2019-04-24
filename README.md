@@ -35,7 +35,7 @@
 - [PWM](#pwm)
   - [Geração de PPM](#gera%C3%A7%C3%A3o-de-ppm)
   - [Leitura de PPM](#leitura-de-ppm)
-- [I²C](#i%C2%B2c)
+- [I²C](#ic)
 - [Apêndices](#ap%C3%AAndices)
   - [Makefile STM32](#makefile-stm32)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
