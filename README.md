@@ -4,42 +4,50 @@
 
 # Índice
 
-- [Índice](#%C3%ADndice)
-- [Introdução](#introdu%C3%A7%C3%A3o)
+- [Índice](#Índice)
+- [Introdução](#introdução)
 - [Requisitos](#requisitos)
   - [STM32 Cube MX](#stm32-cube-mx)
-    - [Instalação no Windows](#instala%C3%A7%C3%A3o-no-windows)
-    - [Instalação no Linux](#instala%C3%A7%C3%A3o-no-linux)
+    - [Instalação no Windows](#instalação-no-windows)
+    - [Instalação no Linux](#instalação-no-linux)
   - [arm-none-eabi-gcc](#arm-none-eabi-gcc)
-    - [Instalação no Windows](#instala%C3%A7%C3%A3o-no-windows-1)
-    - [Instalação no Linux](#instala%C3%A7%C3%A3o-no-linux-1)
+    - [Instalação no Windows](#instalação-no-windows-1)
+    - [Instalação no Linux](#instalação-no-linux-1)
   - [Make](#make)
-    - [Instalação no Windows](#instala%C3%A7%C3%A3o-no-windows-2)
-    - [Instalação no Linux](#instala%C3%A7%C3%A3o-no-linux-2)
+    - [Instalação no Windows](#instalação-no-windows-2)
+    - [Instalação no Linux](#instalação-no-linux-2)
   - [Git](#git)
-    - [Instalação no Windows](#instala%C3%A7%C3%A3o-no-windows-3)
-    - [Instalação no Linux](#instala%C3%A7%C3%A3o-no-linux-3)
+    - [Instalação no Windows](#instalação-no-windows-3)
+    - [Instalação no Linux](#instalação-no-linux-3)
   - [Visual Studio Code](#visual-studio-code)
   - [STM32 Cube Programmer](#stm32-cube-programmer)
 - [STM32 Project Template](#stm32-project-template)
 - [Cube MX](#cube-mx)
-- [Estrutura de Código](#estrutura-de-c%C3%B3digo)
+- [Estrutura de Código](#estrutura-de-código)
 - [HAL](#hal)
 - [GPIO](#gpio)
 - [ADC e DMA](#adc-e-dma)
 - [UART e DMA](#uart-e-dma)
-- [Interrupções](#interrup%C3%A7%C3%B5es)
+  - [Recebendo dados](#recebendo-dados)
+    - [Pacote de 1 byte](#pacote-de-1-byte)
+    - [Pacote de mais de 1 byte](#pacote-de-mais-de-1-byte)
+    - [Transmitindo dados](#transmitindo-dados)
+- [Interrupções](#interrupções)
   - [NVIC](#nvic)
-  - [Interrupções externas](#interrup%C3%A7%C3%B5es-externas)
+  - [Interrupções externas](#interrupções-externas)
 - [Timers](#timers)
 - [PWM](#pwm)
-  - [Geração de PPM](#gera%C3%A7%C3%A3o-de-ppm)
+  - [Geração de PPM](#geração-de-ppm)
   - [Leitura de PPM](#leitura-de-ppm)
 - [I²C](#ic)
-- [Apêndices](#ap%C3%AAndices)
+- [STM Studio](#stm-studio)
+  - [Leitura de variáveis](#leitura-de-variáveis)
+  - [Escrita de variáveis](#escrita-de-variáveis)
+  - [Extras](#extras)
+- [Apêndices](#apêndices)
   - [Makefile STM32](#makefile-stm32)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
-    - [O que é PATH](#o-que-%C3%A9-path)
+    - [O que é PATH](#o-que-é-path)
     - [Windows](#windows)
     - [Linux](#linux)
   - [Instalando MSYS2 no Windows](#instalando-msys2-no-windows)
@@ -1308,6 +1316,102 @@ reg do sensor com endereço `ADDRESS_DEFAULT` e colocamos na variável val
 utilizando um Timeout 1000. Observe que utilizamos a flag para a função retornar
 0 caso dê algo de errado na comunicação com o master. Esta função é utilizada
 para retornar o valor lido pelo sensor.
+
+# STM Studio
+
+STM Studio é o programa de depuração da ST. Com ele é possível ler e escrever em variáveis do programa em tempo real, ou seja, enquanto está rodando na placa.
+
+Para sua utilização, os passos que você deve fazer são os seguintes:
+
+## Leitura de variáveis
+
+Ao abrir pela primeira vez, verá uma tela como essa:
+
+![STM Studio 1](media/stmstudio_1.png)
+
+Clique com o botão direito do Mouse sobre Display Variables Settings e clique em Import para importar as variáveis de interesse de um programa para o STM Studio.
+
+![STM Studio 2](media/stmstudio_2.png)
+
+Em Executable Variables clique nas reticências e localize o arquivo que contém as variáveis.
+
+Tal arquivo é gerado na compilação de seu programa e pode assumir três formatos .elf  ou .out ou .axf  dependendo de onde compilou seu programa.
+
+Se foi compilado das maneiras descritas por esse documento, o arquivo terá extensão .elf e estará localizado na pasta build do seu projeto.
+
+![STM Studio 3](media/stmstudio_3.png)
+
+Nessa tela, é possível ver todas as variáveis globais do seu programa e escolher as de interesse.
+
+Se selecionar a opção Expand table elements é possível escolher um item de determinado vetor, que não seria possível sem essa opção. Assim, no exemplo a seguir, pegarei as variáveis responsáveis por armazenar o valor de três sensores, em que, cada um é um item de um vetor.
+
+Após selecionar todas as variáveis que deseja, clique em Import e deverá ver que elas apareceram em Display Variables Settings.
+
+![STM Studio 4](media/stmstudio_4.png)
+
+Com isso feito clique nas variáveis que deseja observar, clique com o botão direito, e no menu que aparecer, clique em Send to >> Var View 1.
+
+Com isso, sua variável poderá ser visualizada em tempo real em três modos distintos: em tabela, graficamente e em um gráfico de barras.
+
+O modo de visualização, pode ser selecionado no quadro no inferior esquerdo da tela em Viewers settings >> Display >> VarViewer1 as.
+
+![STM Studio 5](media/stmstudio_5.png)
+
+Feito isso já será possível visualizar suas variáveis em tempo real.
+
+Para isso, basta ligar a placa no computador com o gravador e selecionar play.
+
+Certifique-se que a opção ST-link SWD esteja selecionada, caso esteja usando os gravadores ST-LINK  que temos na gaiola.
+
+![STM Studio 6](media/stmstudio_6.png)
+
+Abaixo, imagens de exemplo da visualização de variáveis na vista barras e de gráfico:
+
+![STM Studio 7](media/stmstudio_7.png)
+
+![STM Studio 8](media/stmstudio_8.png)
+
+Cada uma das vistas pode ser mais ou menos útil em determinada situação.
+
+Nessas vistas, atalhos que podem ser úteis são os de zoom. Use a roda do mouse para aumentar ou diminuir o zoom.
+
+Além disso é possível dar um auto zoom nos valores das suas variáveis clicando com o botão direito do mouse no gráfico e depois nessa opção.
+
+## Escrita de variáveis
+
+Para se inscrever em determinada variável do programa, os passos são bem semelhantes aos de escrita. Para isso, basta ir na aba de Write variables, importar a variável como descrito anteriormente. Após isso, pode-se escrever o valor desejado, como se mostra abaixo no exemplo.
+
+![STM Studio 1](media/stmstudio_9.png)
+
+## Extras
+
+Até aqui já é possível fazer quase todos os casos de interesse. Aqui apenas algumas opções a mais e alguns possíveis problemas.
+
+* Para mexer em configurações mais avançadas como taxa de aquisição, pode-se selecionar o menu de Acquisition Settings (ícone do lado de play na versão atual) e verá algumas opções que pode mexer se desejar alguma taxa de aquisição específica:
+
+![STM Studio 1](media/stmstudio_10.png)
+
+* Note que na imagem acima tem a opção de escolher a localização de uma Log File. Tal arquivo salva os dados da última vez que usou o STM Studio e pode ser útil. Para abrir o Log basta ir na pasta especificada.
+
+* As vezes, quando mexe-se em uma variável no programa, compila-se novamente e vai usar no STM Studio quando essa variável já estava aberta, é necessário dar um update na variável. Isso por que as vezes a variável fica com o endereço antigo e não pega as mudanças feitas. Para isso clicar com o botão direito e depois em update.
+
+![STM Studio 1](media/stmstudio_11.png)
+
+* Lembre que para gravar um novo programa em sua placa é necessário parar a depuração do STM Studio. O botão de Play vira um botão de Stop enquanto o programa está rodando.
+
+* É possível visualizar suas variáveis de um último modo que é a visualização em um plano 2D. Para isso, no Menu Views selecione Point Viewer. No canto inferior esquerdo em Point Viewer coloque as variáveis que deseja que apareça nos eixos X e Y.
+
+![STM Studio 1](media/stmstudio_12.png)
+
+* É possível criar expressões com suas variáveis e visualizar o valor de tais expressões. Para isso, clique com o botão direito do mouse em new como na imagem a seguir.
+
+![STM Studio 1](media/stmstudio_13.png)
+
+* Com isso, crie sua função na página que se abrir. No exemplo colocarei, ranges[0] + ranges[1]:
+
+![STM Studio 1](media/stmstudio_14.png)
+
+Basta digitar a expressão. Não é para clicar nos símbolos. Eles servem apenas de referência do que é possível fazer.
 
 # Apêndices
 
