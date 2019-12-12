@@ -37,8 +37,8 @@
   - [Interrupções externas](#interrupções-externas)
 - [Timers](#timers)
 - [PWM](#pwm)
-  - [Geração de PPM](#geração-de-ppm)
-  - [Leitura de PPM](#leitura-de-ppm)
+  - [Geração de PWM limitada](#geração-de-pwm-limitada-(para-servos-e-ESCs))
+  - [Leitura de PWM](#leitura-de-pwm)
 - [I²C](#ic)
 - [STM Studio](#stm-studio)
   - [Leitura de variáveis](#leitura-de-variáveis)
@@ -910,7 +910,7 @@ Algumas macros interessantes de timer são:
   exemplo seria `&htim2`. Por exemplo, se quiséssemos ler o valor do timer,
   utilizaríamos `__HAL_TIM_GET_COUNTER(&htim2)`.
 
-As aplicações de timer mais utilizadas na equipe são em PWM e PPM, que serão
+As aplicações de timer mais utilizadas na equipe são em PWM e PPM, que serão    (aqui)
 explicadas na próxima seção.
 
 # PWM
@@ -1016,34 +1016,36 @@ uma PWM de duty cycle 44.5% no canal 2 (pino PA9). Esse é o princípio básico.
 Partindo disso, podemos desenvolver qualquer lógica para fazer os motores
 girarem da forma que queremos.
 
-## Geração de PPM
+## Geração de PWM limitada (para servos e ESCs)
 
-Para geração de PPM, utilizamos o mesmo princípio, porque basta interpretarmos a
-PPM como uma PWM de duty cycle limitado. Só precisamos pensar nos valores de
-Prescaler e Counter Period para fazer o sinal correto.
+Alguns componentes, como servos motores e ESCs, recebem um sinal de
+PWM com o duty cicle limitado, normalmente entre 1 ms e 2 ms. Para enviarmos 
+sinais dentro dessa faixa, só precisamos definir os valores de Prescaler e
+Counter Period corretos.
 
-Para facilitar as contas e a forma de trabalhar com PPM, recomendo colocar o
-Prescaler sempre como o valor da frequência de clock em MHz subtraído de 1 e o
-Counter Period como 20000. No nosso caso, colocaremos o Prescaler como 63 e o
-Counter Period como 20000. Utilizando a fórmula da frequência da PWM gerada com
-esses valores e a frequência do clock (64 MHz), obtemos uma frequência de 50 Hz.
-O período é, portanto, 1 / 50 = 0.02 s = 20 ms, que é o período de uma PPM. Como
-o Counter Period é 20000, pensar nos valores que a PPM pode ter é simples: 1000
-a 2000. Portanto basta limitar o valor que colocamos no terceiro parâmetro da
-macro `__HAL_TIM_SET_COMPARE` a um intervalo de 1000 a 2000.
+Para facilitar as contas e a forma de trabalhar com esse tipo de PWM, recomendo
+colocar o Prescaler sempre como o valor da frequência de clock em MHz subtraído
+de 1 e o Counter Period como 20000. No nosso caso, colocaremos o Prescaler como
+63 e o Counter Period como 20000. Utilizando a fórmula da frequência da PWM
+gerada com esses valores e a frequência do clock (64 MHz), obtemos uma frequência
+de 50 Hz. O período é, portanto, 1 / 50 = 0.02 s = 20 ms, que é o período de uma
+PWM. Como o Counter Period é 20000, pensar nos valores que a PWM pode ter é
+simples: 1000 a 2000. Portanto basta limitar o valor que colocamos no terceiro
+parâmetro da macro `__HAL_TIM_SET_COMPARE` a um intervalo de 1000 a 2000.
 
-## Leitura de PPM
+## Leitura de PWM
 
-Utilizamos a leitura de PPM principalmente para ler sinais de um receptor. No
-caso de robôs sem arma, precisamos ler, geralmente, duas PPMs (elevator e
-aileron). No caso de robôs com arma, precisamos ler, geralmente três PPMs
+Utilizamos a leitura de PWM principalmente para ler sinais de um receptor. No
+caso de robôs sem arma, precisamos ler, geralmente, duas PWMs (elevator e
+aileron). No caso de robôs com arma, precisamos ler, geralmente três PWMs
 (elevator, aileron e throttle). No exemplo desse documento, faremos a leitura de
-três sinais de PPM.
+três sinais de PWM.
 
-Vamos começar configurando no Cube. Os pinos que usamos para ler PPM devem ser
-de timer e desempenhar a função Input Capture. No nosso exemplo, vamos escolher
-o timer 1, canais 1, 2 e 3. No lado esquerdo, em TIM1, escolhemos Clock Source
-como Internal Clock e em Channel 1, Channel 2 e Channel 3 colocamos a opção
+Vamos começar configurando no Cube. Os pinos que usamos para ler PWM devem ser
+de timer e desempenhar a função Input Capture, que configura um interrupt ativado
+quando ocorre uma borda de subida e/ou descida no pino. No nosso exemplo, vamos
+escolher o timer 1, canais 1, 2 e 3. No lado esquerdo, em TIM1, escolhemos Clock
+Source como Internal Clock e em Channel 1, Channel 2 e Channel 3 colocamos a opção
 Input Capture direct mode. Com isso, os pinos PA8, PA9 e PA10 serão selecionados
 no Pinout na parte direita e estarão com a cor verde.
 
@@ -1051,15 +1053,15 @@ no Pinout na parte direita e estarão com a cor verde.
 
 Na parte "Configuration", apareceram algumas opções.
 
-Utilizando o mesmo princípio da parte de geração de PPM, vamos setar o Prescaler
+Utilizando o mesmo princípio da parte de geração de PWM, vamos setar o Prescaler
 como 63. O Counter Period precisa ser o valor máximo de 16 bits (65535).
 
 ![Cube PPM read set configurations 2](media/cube_ppm_read_set_config_2.png)
 
 Descendo um pouco, vemos as configurações de Input Capture Channel 1, Channel 2
 e Channel 3. Iremos mudar a Polarity Selection. Esse parâmetro de configuração
-escolhe quando ocorre o interrupt no pino setado como Input Capture. Para ler
-PPM, queremos essencialmente saber o tempo que o pino esteve em HIGH. Logo, é
+escolhe quando ocorre o interrupt no pino setado como Input Capture. Para ler a
+PWM, queremos essencialmente saber o tempo que o pino esteve em HIGH. Logo, é
 melhor que ocorra interrupt tanto quando o pino passa de LOW para HIGH como
 quando passa de HIGH para LOW. Por isso, escolhemos Both Edges em Polarity
 Selection. Dependendo do microcontrolador, pode ser que a opção Both Edges não
@@ -1110,7 +1112,7 @@ Essa função pode ser definida em `main.c` ou em `tim.c`. Uma forma de definir
 essa função é a seguinte:
 
 ```c
-#define PPM_CHANNELS 3
+#define PWM_CHANNELS 3
 
 typedef enum _radio_channel {
     CH1, /**< Radio Channel 1 */
@@ -1118,7 +1120,7 @@ typedef enum _radio_channel {
     CH3, /**< Radio Channel 3 */
 } radio_channel_t;
 
-static uint16_t ppm_receiver[PPM_CHANNELS] = {0};
+static uint16_t pwm_receiver[PWM_CHANNELS] = {0};
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim) {
     static uint16_t _tim1_ch1[2] = {0, 0};
@@ -1127,32 +1129,32 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim) {
 
     if (TIM1 == htim->Instance) {
         if (HAL_TIM_ACTIVE_CHANNEL_1 == htim->Channel) {
-            if (ppm_radio_ch1_is_high()) {
+            if (pwm_radio_ch1_is_high()) {
                 _tim1_ch1[0] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
             } else {
                 _tim1_ch1[1] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-                ppm_receiver[CH1] = _tim1_ch1[1] - _tim1_ch1[0];
+                pwm_receiver[CH1] = _tim1_ch1[1] - _tim1_ch1[0];
             }
         } else if (HAL_TIM_ACTIVE_CHANNEL_2 == htim->Channel) {
-            if (ppm_radio_ch2_is_high()) {
+            if (pwm_radio_ch2_is_high()) {
                   _tim1_ch2[0] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
             } else {
                   _tim1_ch2[1] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
-                  ppm_receiver[CH2] = _tim1_ch2[1] - _tim1_ch2[0];
+                  pwm_receiver[CH2] = _tim1_ch2[1] - _tim1_ch2[0];
             }
         } else if (HAL_TIM_ACTIVE_CHANNEL_3 == htim->Channel) {
-            if (ppm_radio_ch3_is_high()) {
+            if (pwm_radio_ch3_is_high()) {
                 _tim1_ch3[0] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
             } else {
                 _tim1_ch3[1] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
-                ppm_receiver[CH3] = _tim1_ch3[1] - _tim1_ch3[0];
+                pwm_receiver[CH3] = _tim1_ch3[1] - _tim1_ch3[0];
             }
         }
     }
 }
 ```
 
-As funções `ppm_radio_chx_is_high()` leem o valor do pino como GPIO.
+As funções `pwm_radio_chx_is_high()` leem o valor do pino como GPIO.
 
 Analisando o código, vemos que primeiro precisamos checar qual timer gerou o
 interrupt. Depois, quais dos canais desse timer que sofreu uma borda de clock.
@@ -1160,9 +1162,9 @@ Temos que contar o tempo que o sinal ficou em alto. Então, como ocorre o
 interrupt em bordas de descida como de subida do clock, temos que subtrair o
 valor capturado do timer quando ocorreu a borda descida do valor capturado do
 timer quando ocorreu a borda de subida. Para detectar se ocorreu uma borda de
-subida ou de descida, utilizamos a função `ppm_radio_chx_is_high()`. Se for uma
+subida ou de descida, utilizamos a função `pwm_radio_chx_is_high()`. Se for uma
 borda de subida, salvamos o valor na primeira  posição do vetor. Caso contrário,
-na segunda posição. Subtraindo os valores do vetor, temos a leitura da PPM.
+na segunda posição. Subtraindo os valores do vetor, temos a leitura da PWM.
 
 Agora, veremos o caso em que não existe a opção Both Edges no timer. Nesse caso,
 devemos utilizar uma interrupção externa de GPIO com um timer, explicado na
