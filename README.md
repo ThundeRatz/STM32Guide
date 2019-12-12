@@ -910,8 +910,8 @@ Algumas macros interessantes de timer são:
   exemplo seria `&htim2`. Por exemplo, se quiséssemos ler o valor do timer,
   utilizaríamos `__HAL_TIM_GET_COUNTER(&htim2)`.
 
-As aplicações de timer mais utilizadas na equipe são em PWM e PPM, que serão    (aqui)
-explicadas na próxima seção.
+As aplicações de timer mais utilizadas na equipe são em PWM, que será    
+explicada na próxima seção.
 
 # PWM
 
