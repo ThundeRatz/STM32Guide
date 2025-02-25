@@ -45,7 +45,7 @@
   - [Escrita de variáveis](#escrita-de-variáveis)
   - [Extras](#extras)
 - [Apêndices](#apêndices)
-  - [Makefile STM32](#makefile-stm32)
+  - [CMake e Makefile](#cmake-e-makefile)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
     - [O que é PATH](#o-que-é-path)
     - [Windows](#windows)
@@ -1413,36 +1413,46 @@ Até aqui já é possível fazer quase todos os casos de interesse. Aqui apenas 
 
 Basta digitar a expressão. Não é para clicar nos símbolos. Eles servem apenas de referência do que é possível fazer.
 
+## CMake e Makefile
+
+Compilar apenas um arquivo em c++ é bastante simples, geralmente basta um comando no terminal. Mas para projetos maiores, como os desenvolvidos na equipe, nos quais o código está distribuído em vários arquivos, e principalmente várias pastas, fica mais complicado. Para isso existem ferramentas como o Make.
+### Make/Makefile
+O Make consegue compilar um arquivo principal (que tem a função main) e suas dependências com um só comando, e também gravar ele no microcontrolador. Para isso, ele precisa de um arquivo de texto Makefile, que contém instruções para o Make conseguir achar os arquivos e as dependências deles. Apesar de ser muito prático utilizar essa ferramenta, criar e manter o Makefile é trabalhoso e complicado, então para isso utilizamos também o CMake.
+
+### CMake
+Com o CMake conseguimos criar um Makefile a partir de outro arquivo de instruções (CMakeLists.txt). Embora pareça redundante criar instruções para criar outro arquivos de instruções, o CMakeLists é muito mais simples de ser criado e alterado.
+
+### Instalando CMake no Linux
+Para instalar, basta rodar no terminal o comando:
+```bash
+sudo apt install cmake
+```
+
+### Usando Make e CMake
+O principal comando do CMake é:
+```bash
+cmake .
+ ```
+Esse comando prepara tudo que é necessário para compilar o código em seguida. Porém com isso ele cria muitos arquivos, e isso pode poluir seu diretório.
+Para evitar isso, nós usamos uma pasta chamada build (você tem que criar ela da primeira que for rodar), entrar nela e aí rodar o comando:
+```bash
+cmake ..
+```
+Esta versão do comando utiliza o CMakeLists da pasta anterior(principal do projeto), mas cria os arquivos na pasta build.
+
+Depois disso podemos usar o Make, que tem vários comandos, listados [aqui](https://github.com/ThundeRatz/STM32ProjectTemplate/blob/develop/cmake/templates/helpme.in), sendo os principais:
+
+`make cube` : gera os arquivos do cube (igual o Generate Code do CubeMX)
+
+`make` : compila o arquivo main.cpp (da pasta src)
+
+`make flash` : compila e grava o arquivo main.cpp (que deve estar na pasta src)
+
+`make TEST_NAME` : compila o arquivo de teste com o nome indicado (que deve estar na pasta test/src/hal ou test/src/proxy)
+
+`make flash_TEST_NAME` : compila e grava o arquivo de teste com o nome indicado (que deve estar na pasta test/src/hal ou test/src/proxy)
+
 # Apêndices
-
-## Makefile STM32
-
-O Makefile utilizado pela equipe encontra-se no STM32ProjectTemplate no GitHub
-[aqui](https://github.com/ThundeRatz/STM32ProjectTemplate/blob/master/Makefile).
-
-É preciso apenas alterar as variáveis `DEVICE_FAMILY`, `DEVICE_TYPE`, `DEVICE`,
-`DEVICE_LD` e `DEVICE_DEF` para se adequar ao microcontrolador usado no projeto.
-Os valores corretos dessas variáveis podem ser inferidos pelo Cube.
-
-O que está escrito no desenho do pinout é o valor de `DEVICE_LD`. Em `DEVICE`, o
-valor é o de `DEVICE_LD` sem os últimos dois caracteres (o “x” e outra letra).
-Em `DEVICE_FAMILY`, o valor é o valor de `DEVICE_LD` até o primeiro número após
-o F, seguido de xx. Em `DEVICE_TYPE`, o valor é o valor de `DEVICE_LD` até os
-três números após o F, seguido de xx. Em `DEVICE_DEF`, o valor é o valor de
-`DEVICE_TYPE`, seguido de x e, geralmente, o caractere que estiver duas posições
-antes do x em `DEVICE`. No nosso exemplo:
-
-![Cube microcontroller image](media/cube_microcontroller_image.png)
-
-Temos que `DEVICE_LD` é `STM32F303C6Tx`, `DEVICE` é `STM32F303C6`,
-`DEVICE_FAMILY` é `STM32F3xx`, `DEVICE_TYPE` é `STM32F303xx` e `DEVICE_DEF` é
-`STM32F303x6`.
-
-O valor de DEVICE_DEF pode ser visto também pelo nome de um arquivo gerado pelo
-Cube. `Em Drivers\CMSIS\Device\ST\STM32F3xx\Include` há um arquivo chamado
-stm32f303x6.h. O nome desse arquivo, sem o .h e com letras maiúsculas, é o valor
-de `DEVICE_DEF`. O valor de `DEVICE_LD` pode ser visto também pelo nome do
-arquivo .ld gerado pelo Cube.
 
 ## Colocando caminhos no PATH
 
