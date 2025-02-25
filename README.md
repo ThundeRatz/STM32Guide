@@ -46,7 +46,7 @@
   - [Fluxo de nós](#fluxo-de-nós)
     - [O que é um nó?](#o-que-é-um-nó)
     - [Explore a ferramenta!](#explore-a-ferramenta)
-- [Debug]()
+- [Debug](#debug)
 - [Apêndices](#apêndices)
   - [Makefile STM32](#makefile-stm32)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
