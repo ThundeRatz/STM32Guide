@@ -40,6 +40,13 @@
   - [Geração de PWM limitada](#geração-de-pwm-limitada-(para-servos-e-ESCs))
   - [Leitura de PWM](#leitura-de-pwm)
 - [I²C](#ic)
+- [STM32 Cube Monitor](#stm32-cube-monitor)
+  - [Configurações iniciais](#configurações-iniciais)
+  - [Leitura de variáveis](#leitura-de-variáveis)
+  - [Fluxo de nós](#fluxo-de-nós)
+    - [O que é um nó?](#o-que-é-um-nó)
+    - [Explore a ferramenta!](#explore-a-ferramenta)
+- [Debug]()
 - [Apêndices](#apêndices)
   - [Makefile STM32](#makefile-stm32)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
@@ -1314,6 +1321,103 @@ reg do sensor com endereço `ADDRESS_DEFAULT` e colocamos na variável val
 utilizando um Timeout 1000. Observe que utilizamos a flag para a função retornar
 0 caso dê algo de errado na comunicação com o master. Esta função é utilizada
 para retornar o valor lido pelo sensor.
+
+# STM32 Cube Monitor
+
+O STM32 Cube Monitor é uma ferramenta oficial da ST que tem como objetivo o monitoramento e a depuração em tempo real. Nele, a partir de um editor gráfico baseado em fluxos, é possível realizar a visualização e modificação de variáveis, de forma simples e com painéis personalizados, contendo gráficos, tabelas e medidores.
+
+Para sua utilização, os seguintes passos devem ser seguidos:
+
+## Configurações iniciais
+
+Ao abrir o programa pela primeira vez, algo do tipo aparecerá:
+
+![stm monitor 1](media/stm_monitor_1.png)
+
+Aperta as teclas `Ctrl + i`, vá em local, selecione o arquivo terminado em "...BasicFlow.json" clique em "importar"
+
+![stm monitor 2](media/stm_monitor_2.png)
+
+Então a seguinte tela deve ser exibida, e tudo está pronto para começar:
+
+![stm monitor 3](media/stm_monitor_3.png)
+
+## Leitura de variáveis
+
+Antes de começar a leitura de variáveis do seu código, ele deve ter sido compilado e a variável deve ser do tipo global.
+
+Ao clicar duas vezes no node escrito "myVariables", em "executable" clique no ícone `+`. Coloque o endereço para o arquivo do tipo ".elf" em "folder" e então selecione o arquivo em "file".
+
+![stm monitor 4](media/stm_monitor_4.png)
+
+Em "variable list" selecione as variáveis que serão lidas, e clique em feito.
+
+![stm monitor 5](media/stm_monitor_5.png)
+
+Com o ST-link ou JLink conectado ao computador, clique duas vezes em "myProbe_Out", no ícone `+` e selecione o Link.
+
+![stm monitor 6](media/stm_monitor_6.png)
+
+Em "myProbe_In" selecione o mesmo já configurado anteriormente.
+
+Clique em feito, depois em "deploy" e "dashboard". Agora ao clicar em "START ACQUISITION", as suas variáveis aparecerão no gráfico.
+
+![stm monitor 7](media/stm_monitor_7.png)
+
+Clicando no "nó" chamado "myChart", é possível alterar o tipo de gráfico, tamanho, limites, etc.
+
+## Fluxo de nós
+
+No monitor é utilizado um sistema de nós (nodes) que permite criar fluxos de monitoramento de dados, que além do que já foi mostrado, também permite a criação de "dashboards" interativos e avançados.
+
+### O que é um nó?
+
+Os nós são blocos modulares que representam funções específicas. Eles podem ser conectados para criar um fluxo de dados.
+
+Existem 3 principais tipos de nó:
+
+- Nó de entrada: Capturam os dados diretamente.
+- Nós de processamento: Aqueles capazes de realizar operações, filtrar ou transformar dados.
+- Nó de saída: Exibe os dados, com gráficos, tabelas, etc.
+
+### Explore a ferramenta!
+
+Os nodes são ferramentas potentes capazes de criar funções, filtros, avisos, alertas, automações.
+As possibilidades são imensas, explore para usar ao seu favor!
+
+# Debug
+
+É possível depurar utilizando [`gdb`](https://www.gnu.org/software/gdb/) no linux.
+Primeiramente para instalar rode:
+
+```
+sudo apt install gdb-multiarch
+```
+
+Para depurar o projeto, ao rodar `cmake`, é necessário usar o `BUILD_TYPE=Debug`, como exemplo:
+
+```
+cmake .. -DBUILD_TYPE=Debug
+```
+
+E para gerar os arquivos para depuração, rode:
+
+```
+make debug
+```
+
+Também é possível depurar testes, utilizando:
+
+```
+make debug_[test_name]
+```
+
+Para realmente depurar o projeto, a [Extensão Cortex Debug](https://marketplace.visualstudio.com/items?marus25.Cortex-Debug) para VSCode deve estar instalada. Para cada tipo de depuração, deve-se utilizar o server gdb respectivo.
+
+
+- [J-Link](https://www.segger.com/downloads/jlink/)
+- [OpenOCD](https://openocd.org/) (`sudo apt install openocd`)
+- [ST-Util](https://github.com/stlink-org/stlink) (`sudo apt install stlink-tools`)
 
 # Apêndices
 
