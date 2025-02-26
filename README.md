@@ -44,8 +44,12 @@
   - [Leitura de variáveis](#leitura-de-variáveis)
   - [Escrita de variáveis](#escrita-de-variáveis)
   - [Extras](#extras)
+- [CMake e Makefile](#cmake-e-makefile)
+  - [Make/Makefile](#makemakefile)
+  - [Cmake](#cmake)
+  - [Instalando CMake no linux](#instalando-cmake-no-linux)
+  - [Compilando e executando o projeto](#compilando-e-executando-o-projeto)
 - [Apêndices](#apêndices)
-  - [CMake e Makefile](#cmake-e-makefile)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
     - [O que é PATH](#o-que-é-path)
     - [Windows](#windows)
@@ -1413,22 +1417,22 @@ Até aqui já é possível fazer quase todos os casos de interesse. Aqui apenas 
 
 Basta digitar a expressão. Não é para clicar nos símbolos. Eles servem apenas de referência do que é possível fazer.
 
-## CMake e Makefile
+# CMake e Makefile
 
 Compilar apenas um arquivo em c++ é bastante simples, geralmente basta um comando no terminal. Mas para projetos maiores, como os desenvolvidos na equipe, nos quais o código está distribuído em vários arquivos, e principalmente várias pastas, fica mais complicado. Para isso existem ferramentas como o Make.
-### Make/Makefile
+## Make/Makefile
 O Make consegue compilar um arquivo principal (que tem a função main) e suas dependências com um só comando, e também gravar ele no microcontrolador. Para isso, ele precisa de um arquivo de texto Makefile, que contém instruções para o Make conseguir achar os arquivos e as dependências deles. Apesar de ser muito prático utilizar essa ferramenta, criar e manter o Makefile é trabalhoso e complicado, então para isso utilizamos também o CMake.
 
-### CMake
+## CMake
 Com o CMake conseguimos criar um Makefile a partir de outro arquivo de instruções (CMakeLists.txt). Embora pareça redundante criar instruções para criar outro arquivos de instruções, o CMakeLists é muito mais simples de ser criado e alterado.
 
-### Instalando CMake no Linux
+## Instalando CMake no Linux
 Para instalar, basta rodar no terminal o comando:
 ```bash
 sudo apt install cmake
 ```
 
-### Usando Make e CMake
+## Compilando e executando o projeto
 O principal comando do CMake é:
 ```bash
 cmake .
