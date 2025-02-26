@@ -1440,6 +1440,8 @@ cmake .
 Esse comando prepara tudo que é necessário para compilar o código em seguida. Porém com isso ele cria muitos arquivos, e isso pode poluir seu diretório.
 Para evitar isso, nós usamos uma pasta chamada build (você tem que criar ela da primeira que for rodar), entrar nela e aí rodar o comando:
 ```bash
+#mkdir build
+#cd build
 cmake ..
 ```
 Esta versão do comando utiliza o CMakeLists da pasta anterior(principal do projeto), mas cria os arquivos na pasta build.
