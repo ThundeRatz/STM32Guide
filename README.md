@@ -37,8 +37,8 @@
   - [Interrupções externas](#interrupções-externas)
 - [Timers](#timers)
 - [PWM](#pwm)
-  - [Geração de PWM limitada](#geração-de-pwm-limitada-(para-servos-e-ESCs))
-  - [Leitura de PWM](#leitura-de-pwm)
+  - [Geração de PPM](#geração-de-ppm)
+  - [Leitura de PPM](#leitura-de-ppm)
 - [I²C](#ic)
 - [STM Studio](#stm-studio)
   - [Leitura de variáveis](#leitura-de-variáveis)
@@ -428,16 +428,15 @@ RESET (0) ou vice-versa.
 
 # ADC e DMA
 
-Não cabe explicar aqui o funcionamento detalhado de um ADC (Analog to Digital
-Converter) ou do DMA (Direct Memory Access), há vários recursos na internet para
-isso. O ADC serve basicamente para pegarmos valores contínuos de tensão, em
-nosso caso normalmente retornados por sensores e transformá-los em números que
-podemos trabalhar. O DMA ajuda a fazer isso de maneira mais rápida e automática.
+O ADC (Analog to Digital Converter) serve basicamente para pegarmos, em intervalos 
+regulares, os valores contínuos de tensão (em nosso caso normalmente retornados por 
+sensores) e transformá-los em números que podemos trabalhar (valores digitais). 
+O DMA ajuda a fazer isso de maneira mais rápida e automática. Aqui está um 
+[vídeo](https://youtu.be/xy9mMh7KYE8?si=4CUXsLmqLkxEOFI9) para você aprender mais sobre o ADC.
 
-Começando pelo Cube, a partir daqui configurações adicionais costumam ser
-necessárias e nem todos os pinos podem executar todas as funções, isso é muito
-importante de checar na hora de projetar uma placa, para que todos os pinos
-tenham as funções desejadas.
+Começando pelo Cube, algumas configurações adicionais serão necessárias, mas prestem 
+atenção, pois nem todos os pinos podem executar todas as funções, portanto, é importante 
+checar na hora de projetar uma placa para que todos os pinos tenham as funções desejadas.
 
 ![Cube select ADC pin function](media/cube_select_pin_function_adc.png)
 
@@ -450,27 +449,33 @@ ADC1_IN2, que também será usado a seguir.
 
 ![Cube ADC configuration screen](media/cube_adc_config.png)
 
+Uma observação é que se não aparecer esta opção de mudar o modo do ADC1_IN1, significa 
+que ele já está configurado como "IN1 Single-ended", assim, não precisa fazer a parte
+citada acima.
+
+![Cube ADC configuration screen 2](media/cube_adc_config2.png)
+
 Após escolher um pino de ADC, aparecem algumas opções na parte "Configuration"
 abaixo. É necessário alterar algumas dessas opções para terminar de
 configurá-lo.
 
-Como dito, essa tela pode variar dependendo do uC e do pino escolhido, porque
-alguns uCs tem mais funcionalidades. Só é necessário mexer em algumas
+Como dito, **essa tela pode variar dependendo do uC e do pino escolhido, porque
+alguns uCs tem mais funcionalidades**. Só é necessário mexer em algumas
 configurações. Na maioria dos casos, queremos que o ADC seja lido continuamente,
-então é necessário ligar o Continuous Conversion Mode e o DMA Continuous
-Requests:
+então é necessário ligar o "Continuous Conversion Mode" e o "DMA Continuous
+Requests":
 
 ![Cube ADC configuring 1](media/cube_adc_configuring_1.png)
 
-Álém disso, deve-se mudar o Number of Conversion para a quantidade de canais que
-deve ser lido, nesse caso, 2. Ao mudar isso, o Scan Conversion Mode será ativado
-automaticamente e aparecerá novos menus“Rank” de acordo como quantidade
+Além disso, deve-se mudar o "Number of Conversion" para a quantidade de canais que
+deve ser lido, nesse caso, 2. Ao mudar isso, o "Scan Conversion Mode" será ativado
+automaticamente e aparecerá novos menus “Rank” de acordo como quantidade
 escolhida:
 
 ![Cube ADC configuring 2](media/cube_adc_configuring_2.png)
 
-É necessário abrir esses Ranks e colocar os canais lá, preferencialmente em
-ordem, e aumentar o Sampling Time para algo maior (não há um número definido):
+É necessário abrir esses "Ranks" e colocar os canais lá, preferencialmente em
+ordem, e aumentar o "Sampling Time" para algo maior (não há um número definido):
 
 ![Cube ADC configuring 3](media/cube_adc_configuring_3.png)
 
@@ -487,10 +492,11 @@ E adicionar o DMA na aba DMA, mudando o Mode para "Circular" e Data Width para
 
 Após essas configurações, podemos gerar o código.
 
-Adicione a função `MX_ADC1_Init()` a main ou em alguma outra função de
-inicialização, as funções relacionadas ao adc estão no `stm32f3xx_hal_adc.c`.
+Para podermos iniciar o ADC, basta adicionar a função `MX_ADC1_Init()` 
+na main ou em alguma outra função de inicialização, as funções relacionadas 
+ao adc estão no `stm32f3xx_hal_adc.c`.
 
-Com a utilização do DMA e a configuração de leitura contínua, é necessário criar
+Como estamos utilizando o DMA e a configuração de leitura contínua, é necessário criar
 um buffer para guardar essas leituras, então, em algum lugar do código, é
 necessário declarar um vetor com um tamanho múltiplo do número de canais (é
 necessário um número razoavelmente grande, para evitar que ele encha o buffer
@@ -502,19 +508,19 @@ automaticamente:
 HAL_ADC_Start_DMA(&hadc1, adc_buffer, 512);
 ```
 
-Isso deve ser adicionado depois do Init, e apenas uma vez, quando isso for
-feito, os canais serão lidos na ordem definida na configuração acima (os ranks)
+**Isso deve ser adicionado depois do Init, e apenas uma vez**, quando isso for
+feito, os canais serão lidos na ordem definida na configuração acima (ao configurar os ranks)
 e o vetor será preenchido na mesma ordem, quando o vetor encher, o DMA acionará
-uma interrupção, que pode pode ser acessada por:
+uma interrupção, e, se for preciso, pode ser acessada por:
 
 ```c
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
 ```
 
-Essa função deve ser definida em algum lugar do programa, como após a main ou em
+Essa função pode ser definida em algum lugar do programa, como após a main ou em
 um arquivo relacionado a utilização do ADC, como sensores.c caso o ADC seja
-utilizado para leitura de sensores. Nela deve-se manipular os dados do buffer,
-por exemplo:
+utilizado para leitura de sensores. **Só é necessário colocar essa função caso você precisar utilizar/manipular os dados do buffer**,
+como é feito no programa abaixo:
 
 ```c
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
@@ -910,8 +916,8 @@ Algumas macros interessantes de timer são:
   exemplo seria `&htim2`. Por exemplo, se quiséssemos ler o valor do timer,
   utilizaríamos `__HAL_TIM_GET_COUNTER(&htim2)`.
 
-As aplicações de timer mais utilizadas na equipe são em PWM, que será    
-explicada na próxima seção.
+As aplicações de timer mais utilizadas na equipe são em PWM e PPM, que serão
+explicadas na próxima seção.
 
 # PWM
 
@@ -1016,36 +1022,34 @@ uma PWM de duty cycle 44.5% no canal 2 (pino PA9). Esse é o princípio básico.
 Partindo disso, podemos desenvolver qualquer lógica para fazer os motores
 girarem da forma que queremos.
 
-## Geração de PWM limitada (para servos e ESCs)
+## Geração de PPM
 
-Alguns componentes, como servos motores e ESCs, recebem um sinal de
-PWM com o duty cicle limitado, normalmente entre 1 ms e 2 ms. Para enviarmos 
-sinais dentro dessa faixa, só precisamos definir os valores de Prescaler e
-Counter Period corretos.
+Para geração de PPM, utilizamos o mesmo princípio, porque basta interpretarmos a
+PPM como uma PWM de duty cycle limitado. Só precisamos pensar nos valores de
+Prescaler e Counter Period para fazer o sinal correto.
 
-Para facilitar as contas e a forma de trabalhar com esse tipo de PWM, recomendo
-colocar o Prescaler sempre como o valor da frequência de clock em MHz subtraído
-de 1 e o Counter Period como 20000. No nosso caso, colocaremos o Prescaler como
-63 e o Counter Period como 20000. Utilizando a fórmula da frequência da PWM
-gerada com esses valores e a frequência do clock (64 MHz), obtemos uma frequência
-de 50 Hz. O período é, portanto, 1 / 50 = 0.02 s = 20 ms, que é o período de uma
-PWM. Como o Counter Period é 20000, pensar nos valores que a PWM pode ter é
-simples: 1000 a 2000. Portanto basta limitar o valor que colocamos no terceiro
-parâmetro da macro `__HAL_TIM_SET_COMPARE` a um intervalo de 1000 a 2000.
+Para facilitar as contas e a forma de trabalhar com PPM, recomendo colocar o
+Prescaler sempre como o valor da frequência de clock em MHz subtraído de 1 e o
+Counter Period como 20000. No nosso caso, colocaremos o Prescaler como 63 e o
+Counter Period como 20000. Utilizando a fórmula da frequência da PWM gerada com
+esses valores e a frequência do clock (64 MHz), obtemos uma frequência de 50 Hz.
+O período é, portanto, 1 / 50 = 0.02 s = 20 ms, que é o período de uma PPM. Como
+o Counter Period é 20000, pensar nos valores que a PPM pode ter é simples: 1000
+a 2000. Portanto basta limitar o valor que colocamos no terceiro parâmetro da
+macro `__HAL_TIM_SET_COMPARE` a um intervalo de 1000 a 2000.
 
-## Leitura de PWM
+## Leitura de PPM
 
-Utilizamos a leitura de PWM principalmente para ler sinais de um receptor. No
-caso de robôs sem arma, precisamos ler, geralmente, duas PWMs (elevator e
-aileron). No caso de robôs com arma, precisamos ler, geralmente três PWMs
+Utilizamos a leitura de PPM principalmente para ler sinais de um receptor. No
+caso de robôs sem arma, precisamos ler, geralmente, duas PPMs (elevator e
+aileron). No caso de robôs com arma, precisamos ler, geralmente três PPMs
 (elevator, aileron e throttle). No exemplo desse documento, faremos a leitura de
-três sinais de PWM.
+três sinais de PPM.
 
-Vamos começar configurando no Cube. Os pinos que usamos para ler PWM devem ser
-de timer e desempenhar a função Input Capture, que configura um interrupt ativado
-quando ocorre uma borda de subida e/ou descida no pino. No nosso exemplo, vamos
-escolher o timer 1, canais 1, 2 e 3. No lado esquerdo, em TIM1, escolhemos Clock
-Source como Internal Clock e em Channel 1, Channel 2 e Channel 3 colocamos a opção
+Vamos começar configurando no Cube. Os pinos que usamos para ler PPM devem ser
+de timer e desempenhar a função Input Capture. No nosso exemplo, vamos escolher
+o timer 1, canais 1, 2 e 3. No lado esquerdo, em TIM1, escolhemos Clock Source
+como Internal Clock e em Channel 1, Channel 2 e Channel 3 colocamos a opção
 Input Capture direct mode. Com isso, os pinos PA8, PA9 e PA10 serão selecionados
 no Pinout na parte direita e estarão com a cor verde.
 
@@ -1053,15 +1057,15 @@ no Pinout na parte direita e estarão com a cor verde.
 
 Na parte "Configuration", apareceram algumas opções.
 
-Utilizando o mesmo princípio da parte de geração de PWM, vamos setar o Prescaler
+Utilizando o mesmo princípio da parte de geração de PPM, vamos setar o Prescaler
 como 63. O Counter Period precisa ser o valor máximo de 16 bits (65535).
 
 ![Cube PPM read set configurations 2](media/cube_ppm_read_set_config_2.png)
 
 Descendo um pouco, vemos as configurações de Input Capture Channel 1, Channel 2
 e Channel 3. Iremos mudar a Polarity Selection. Esse parâmetro de configuração
-escolhe quando ocorre o interrupt no pino setado como Input Capture. Para ler a
-PWM, queremos essencialmente saber o tempo que o pino esteve em HIGH. Logo, é
+escolhe quando ocorre o interrupt no pino setado como Input Capture. Para ler
+PPM, queremos essencialmente saber o tempo que o pino esteve em HIGH. Logo, é
 melhor que ocorra interrupt tanto quando o pino passa de LOW para HIGH como
 quando passa de HIGH para LOW. Por isso, escolhemos Both Edges em Polarity
 Selection. Dependendo do microcontrolador, pode ser que a opção Both Edges não
@@ -1112,7 +1116,7 @@ Essa função pode ser definida em `main.c` ou em `tim.c`. Uma forma de definir
 essa função é a seguinte:
 
 ```c
-#define PWM_CHANNELS 3
+#define PPM_CHANNELS 3
 
 typedef enum _radio_channel {
     CH1, /**< Radio Channel 1 */
@@ -1120,7 +1124,7 @@ typedef enum _radio_channel {
     CH3, /**< Radio Channel 3 */
 } radio_channel_t;
 
-static uint16_t pwm_receiver[PWM_CHANNELS] = {0};
+static uint16_t ppm_receiver[PPM_CHANNELS] = {0};
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim) {
     static uint16_t _tim1_ch1[2] = {0, 0};
@@ -1129,32 +1133,32 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef* htim) {
 
     if (TIM1 == htim->Instance) {
         if (HAL_TIM_ACTIVE_CHANNEL_1 == htim->Channel) {
-            if (pwm_radio_ch1_is_high()) {
+            if (ppm_radio_ch1_is_high()) {
                 _tim1_ch1[0] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
             } else {
                 _tim1_ch1[1] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-                pwm_receiver[CH1] = _tim1_ch1[1] - _tim1_ch1[0];
+                ppm_receiver[CH1] = _tim1_ch1[1] - _tim1_ch1[0];
             }
         } else if (HAL_TIM_ACTIVE_CHANNEL_2 == htim->Channel) {
-            if (pwm_radio_ch2_is_high()) {
+            if (ppm_radio_ch2_is_high()) {
                   _tim1_ch2[0] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
             } else {
                   _tim1_ch2[1] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
-                  pwm_receiver[CH2] = _tim1_ch2[1] - _tim1_ch2[0];
+                  ppm_receiver[CH2] = _tim1_ch2[1] - _tim1_ch2[0];
             }
         } else if (HAL_TIM_ACTIVE_CHANNEL_3 == htim->Channel) {
-            if (pwm_radio_ch3_is_high()) {
+            if (ppm_radio_ch3_is_high()) {
                 _tim1_ch3[0] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
             } else {
                 _tim1_ch3[1] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
-                pwm_receiver[CH3] = _tim1_ch3[1] - _tim1_ch3[0];
+                ppm_receiver[CH3] = _tim1_ch3[1] - _tim1_ch3[0];
             }
         }
     }
 }
 ```
 
-As funções `pwm_radio_chx_is_high()` leem o valor do pino como GPIO.
+As funções `ppm_radio_chx_is_high()` leem o valor do pino como GPIO.
 
 Analisando o código, vemos que primeiro precisamos checar qual timer gerou o
 interrupt. Depois, quais dos canais desse timer que sofreu uma borda de clock.
@@ -1162,9 +1166,9 @@ Temos que contar o tempo que o sinal ficou em alto. Então, como ocorre o
 interrupt em bordas de descida como de subida do clock, temos que subtrair o
 valor capturado do timer quando ocorreu a borda descida do valor capturado do
 timer quando ocorreu a borda de subida. Para detectar se ocorreu uma borda de
-subida ou de descida, utilizamos a função `pwm_radio_chx_is_high()`. Se for uma
+subida ou de descida, utilizamos a função `ppm_radio_chx_is_high()`. Se for uma
 borda de subida, salvamos o valor na primeira  posição do vetor. Caso contrário,
-na segunda posição. Subtraindo os valores do vetor, temos a leitura da PWM.
+na segunda posição. Subtraindo os valores do vetor, temos a leitura da PPM.
 
 Agora, veremos o caso em que não existe a opção Both Edges no timer. Nesse caso,
 devemos utilizar uma interrupção externa de GPIO com um timer, explicado na
