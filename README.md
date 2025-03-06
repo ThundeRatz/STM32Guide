@@ -1334,7 +1334,7 @@ Ao abrir o programa pela primeira vez, algo do tipo aparecerá:
 
 ![stm monitor 1](media/stm_monitor_1.png)
 
-Aperta as teclas `Ctrl + i`, vá em local, selecione o arquivo terminado em "...BasicFlow.json" clique em "importar"
+Aperte as teclas `Ctrl + I`, vá em local, selecione o arquivo terminado em "BasicFlow.json" e clique em "importar".
 
 ![stm monitor 2](media/stm_monitor_2.png)
 
