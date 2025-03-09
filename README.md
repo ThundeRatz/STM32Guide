@@ -84,14 +84,21 @@ específicas estarão em suas respectivas seções.
 
 ### Instalação no Windows
 
-Para baixar o pacote de instalação do CubeMX, é necessário antes ter uma conta no site da ST. Caso não tenha, crie uma.
-
-Em seguida, vá até "Get Software" e escolha a ultima versão disponível para Windows.
+Para baixar o CubeMX, clique em "Get Software" e escolha a ultima versão disponível para Windows.
 
 ![Cube windows installation](media/cubemx_download.png)
 
-Extraia o .zip e execute o arquivo SetupSTM32CubeMX-X.X.X.exe (X.X.X é a
-versão). Siga as instruções da tela.
+Antes de poder baixar o software é necessário estar logado em uma conta da ST. Caso não tenha, crie uma antes de continuar.
+
+Extraia o .zip e execute o arquivo SetupSTM32CubeMX-X.X.X.exe (X.X.X é a versão).
+
+Seguindo as instruções da tela, copie o caminho em que o CubeMX será instalado, isso vai ser importante para configurar o `CUBE_PATH`
+
+![Cube installation path](media/cube_installation_path.png)
+
+Entrando nas variáveis de ambiente, seguindo o [Apêndice 2](#colocando-caminhos-no-path), na parte de cima em `Variáveis de usuário`, crie uma nova variável de ambiente chamada `CUBE_PATH` e cole o caminho da instalação do CubeMX no valor da variável.
+
+![Cube path](media/cube_path.png)
 
 ### Instalação no Linux
 
