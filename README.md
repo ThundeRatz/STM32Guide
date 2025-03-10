@@ -51,6 +51,9 @@
     - [Windows](#windows)
     - [Linux](#linux)
   - [Instalando MSYS2 no Windows](#instalando-msys2-no-windows)
+  - [Virtualização da BIOS](#Habilitando-a-virtualização-na-BIOS)
+  - [Instalando o WSL](#Instalando-o-WSL)
+
 
 ---
 
@@ -167,13 +170,17 @@ programas. Para baixá-lo, acesse [esse
 link](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
 
 ### Instalação no Windows
+Se não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+Se já instalou o WSL, abra o terminal do Ubuntu e insira o comando:
 
-Baixe a versão mais recente para seu sistema e execute o instalador.
+```
+$ sudo apt install -y gcc-arm-none-eabi
+```
+Para garantir que o GCC foi instalado corretamente, verifique a versão:
 
-Após a instalação, coloque o local dos executáveis no Path [(Apêndice
-2)](#colocando-caminhos-no-path). O local padrão no Windows é `C:\Program Files
-(x86)\GNU Tools Arm Embedded\7 2018-q2-update\bin`.
-
+```
+$ arm-none-eabi-gcc --version
+```
 ### Instalação no Linux
 
 Baixe o arquivo `.tar.bz2` e extraia usando o comando:
@@ -194,7 +201,18 @@ Para poder compilar com mais facilidade, é necessário ter o make instalado.
 
 ### Instalação no Windows
 
-Baixe pelo MSYS2 [(Apêndice 3)](#instalando-msys2-no-windows).
+Se não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+Se já instalou o WSL, abra o terminal do Ubuntu e insira o comando:
+
+```
+$ sudo apt install make
+```
+
+Para garantir que tudo foi instalado corretamente, verifique a versão:
+
+```
+$ make --version
+```
 
 ### Instalação no Linux
 
@@ -203,17 +221,53 @@ Instale pelo gerenciador de pacotes. No caso do Ubuntu:
 ```bash
 $ sudo apt install make
 ```
-
-## Git
-
-Para pegar o STM32 Project Template e fazer o controle de versão.
+## CMake
 
 ### Instalação no Windows
 
-Para baixar acesse [esse link](https://git-scm.com/downloads).
+Se não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+Se já instalou o WSL, abra o terminal do Ubuntu e insira o comando:
 
-Execute o instalador. Deixe as opções padrões, assim o local de instalação já
-será adicionado ao Path.
+```
+$ sudo apt install cmake
+```
+Para garantir que tudo foi instalado corretamente, verifique a versão:
+
+```
+$ cmake --version
+```
+
+### Instalação no Linux
+
+Abra o terminal do Ubuntu e insira o comando:
+
+```
+$ sudo apt install cmake
+```
+Para garantir que tudo foi instalado corretamente, verifique a versão:
+
+```
+$ cmake --version
+```
+
+## Git
+
+Git é um sistema de controle de versão distribuído. Ele serve para rastrear alterações em arquivos, especialmente em projetos de desenvolvimento de software, permitindo que várias pessoas trabalhem simultaneamente sem perder histórico ou sobrescrever mudanças.
+
+### Instalação no Windows
+
+Se não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+Se já instalou o WSL, abra o terminal do Ubuntu e insira o comando:
+
+```
+$ sudo apt install git 
+```
+
+Para garantir que tudo foi instalado corretamente, verifique a versão:
+
+```
+$ git --version
+```
 
 ### Instalação no Linux
 
@@ -1613,3 +1667,48 @@ diferenças nas saídas).
 
 Se a saída no Prompt de Comando foi parecida com essa, pronto. Você terminou de
 instalar as ferramentas do MSYS2 que utilizamos.
+
+    
+## Habilitando a virtualização na BIOS   
+Para que seja possível a instalação do WSL, primeiro é necessário que a virtualização da BIOS/UEFI esteja habilitada. A virtualização permite que o seu dispositivo Windows emule um sistema operativo diferente, como Android ou Linux. 
+Para saber este status na sua máquina, abra o gerenciador de tarefas, vá para desempenho e olhe naquelas informações ali em baixo:
+
+![virtualização ON](https://github.com/user-attachments/assets/4109eded-9a59-48f6-bf46-1b09f19a6374)
+
+Se já está habilitado, prossiga para o passo 1 da [instalação do WSL](# Instalando-o-WSL). 
+Caso contrário, acesse este [guia](#https://support.microsoft.com/pt-br/windows/ativar-a-virtualiza%C3%A7%C3%A3o-no-windows-c5578302-6e43-4b4b-a449-8ced115f58e1) da Microsoft do seu celular e siga o passo a passo no seu computador.
+Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior.
+
+
+## Instalando o WSL
+
+WSL (Windows Subsystem for Linux) é uma funcionalidade do Windows que permite a execução de aplicativos e comandos do Linux Ubuntu diretamente no terminal do Windows.
+
+0. Primeiro verifique se a virtualização da sua máquina está habilitada clicando [aqui](# Habilitando-a-virtualização-na-BIOS)
+
+1. Com o passo anterior concluido, vamos ativar o WSL. Vá em:
+
+painel de controle -> programas -> ativar ou desativar recursos do Windows  
+
+Habilite as 3 opções a seguir:
+- [X] Plataforma de máquina virtual
+- [X] Plataforma do hipervisor do Windows
+- [X] Subsistema do Windows para Linux
+
+Reinicie seu compiuter.
+
+2. Abra o PowerShell como Administrador, insira o comando e aguarde a instalação:
+    
+`wsl --install -d Ubuntu` 
+   
+3. Abra o Ubuntu. Ele pedirá para criar um nome de usuário e senha para o ambiente Linux.
+
+4. Agora atualize os pacotes do sistema:
+    
+```bash
+$ sudo apt update && sudo apt upgrade -y
+```
+
+Beleza por aqui era só. 
+##### [REFERENCIA](https://learn.microsoft.com/pt-br/windows/wsl/install#prerequisites)
+
