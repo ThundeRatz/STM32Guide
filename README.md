@@ -13,6 +13,8 @@
   - [arm-none-eabi-gcc](#arm-none-eabi-gcc)
     - [Instalação no Windows](#instalação-no-windows-1)
     - [Instalação no Linux](#instalação-no-linux-1)
+  - [G++](#G++)
+    - [Instalação (Windows e Linux)](#Instalação-(Windows-e-Linux)) 
   - [Make](#make)
     - [Instalação no Windows](#instalação-no-windows-2)
     - [Instalação no Linux](#instalação-no-linux-2)
@@ -194,6 +196,22 @@ Mova a pasta gerada para qualquer lugar que desejar.
 Após a instalação é necessário colocar os executáveis no PATH [(Apêndice
 2)](#colocando-caminhos-no-path). Eles estão na pasta bin, dentro da pasta
 extraída.
+
+## G++
+O g++ é um compilador de C++ que faz parte da coleção GNU Compiler Collection (GCC). Ele é usado tanto no Windows quanto no Linux para compilar e gerar programas escritos em C++. 
+
+### Instalação (Windows e Linux)
+Se não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+Se já instalou o WSL, abra o terminal do Ubuntu e insira o comando:
+
+```
+$ sudo apt install g++
+```
+Quando for compilar, use:
+
+````
+g++ arquivo_main.cpp arquivo funções.cpp -o nome_do_executavel.exe
+````
 
 ## Make
 
