@@ -48,6 +48,7 @@
   - [Make/Makefile](#makemakefile)
   - [Cmake](#cmake)
   - [Instalando CMake no linux](#instalando-cmake-no-linux)
+  - [Configuração inicial do CMakeLists](#configuração-inicial-do-cmake)
   - [Compilando e executando o projeto](#compilando-e-executando-o-projeto)
 - [Apêndices](#apêndices)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
@@ -1432,19 +1433,39 @@ Para instalar, basta rodar no terminal o comando:
 sudo apt install cmake
 ```
 
+> [!IMPORTANT]
+> Os tópicos seguintes são voltados para projetos que utilizam o nosso [template](https://github.com/ThundeRatz/STM32ProjectTemplate)
+
+## Configuração inicial do CMake
+
+Ao iniciar um projeto com o template, algumas configurações devem ser feitas no CmakeLists principal do repositório, indicado na imagem:
+
+![CMake Main File](media/cmake_main_file.png)
+
+Abrindo esse arquivo você encontrará algo como isso:
+
+![CMake Variables](media/cmake_project_variables.png)
+
+Nos dois locais indicados você deve inserir o nome do seu projeto e a versão da eletrônica dele. Isso é importante porque o CMake vai procurar na pasta cube um arquivo ioc (aquele feito no CubeMX) chamado "nome"_"versão", para gerar os arquivos necessários. No exemplo da imagem, seria example_v0.ioc
+
+Note que se for reprojetar a placa do seu projeto, você terá um novo cube(ex: example_v1.ioc), e então terá que voltar ao CmakeLists e trocar o BOARD_VERSION para v1.
 ## Compilando e executando o projeto
 O principal comando do CMake é:
 ```bash
 cmake .
  ```
 Esse comando prepara tudo que é necessário para compilar o código em seguida. Porém com isso ele cria muitos arquivos, e isso pode poluir seu diretório.
-Para evitar isso, nós usamos uma pasta chamada build (você tem que criar ela da primeira que for rodar), entrar nela e aí rodar o comando:
+
+Para evitar isso, nós usamos uma pasta chamada `build` onde o comando deve ser executado e que deve ser criada manualmente:
 ```bash
-#mkdir build
-#cd build
+mkdir build #cria a pasta `build`
+cd build #entra na pasta `build`
 cmake ..
 ```
-Esta versão do comando utiliza o CMakeLists da pasta anterior(principal do projeto), mas cria os arquivos na pasta build.
+
+> Esta versão do comando (`cmake ..`) utiliza o CMakeLists da pasta anterior(principal do projeto), mas cria os arquivos na pasta build.
+
+> Note que só é necessário criar a pasta`build` se ela ainda não tiver sido criada.
 
 Depois disso podemos usar o Make, que tem vários comandos, listados [aqui](https://github.com/ThundeRatz/STM32ProjectTemplate/blob/develop/cmake/templates/helpme.in), sendo os principais:
 
@@ -1452,11 +1473,11 @@ Depois disso podemos usar o Make, que tem vários comandos, listados [aqui](http
 
 `make` : compila o arquivo main.cpp (da pasta src)
 
-`make flash` : compila e grava o arquivo main.cpp (que deve estar na pasta src)
+`make flash` : compila e grava(passa as intruções para o microcontrolador) o arquivo main.cpp (que deve estar na pasta src)
 
-`make TEST_NAME` : compila o arquivo de teste com o nome indicado (que deve estar na pasta test/src/hal ou test/src/proxy)
+`make TEST_NAME` : compila o arquivo de teste com o nome indicado (que deve estar em uma subpasta de test/src. Por exemplo, test/src/proxy/TEST_NAME.cpp)
 
-`make flash_TEST_NAME` : compila e grava o arquivo de teste com o nome indicado (que deve estar na pasta test/src/hal ou test/src/proxy)
+`make flash_TEST_NAME` : compila e grava o arquivo de teste com o nome indicado (que deve estar em uma subpasta de test/src. Por exemplo, test/src/proxy/TEST_NAME.cpp)
 
 # Apêndices
 
