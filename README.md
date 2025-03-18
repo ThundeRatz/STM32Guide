@@ -17,9 +17,9 @@
   - [Make](#make)
     - [Instalação WSL/Linux](#Instalação-WSL/Linux-3) 
   - [CMake](#CMake) 
-      - [Instalação WSL/Linux](#Instalação-WSL/Linux-4) 
+    - [Instalação WSL/Linux](#Instalação-WSL/Linux-4) 
   - [Git](#GIT)
-    - [Instalação no Windows](#instalação-no-windows-5) 
+    - [Instalação WSL/Linux](#Instalação-WSL/Linux-5)
   - [Visual Studio Code](#visual-studio-code)
   - [STM32 Cube Programmer](#stm32-cube-programmer)
 - [STM32 Project Template](#stm32-project-template)
@@ -179,7 +179,7 @@ sudo apt install -y gcc-arm-none-eabi
 Para garantir que o GCC foi instalado corretamente, verifique a versão:
 
 ```bash
-$ arm-none-eabi-gcc --version
+arm-none-eabi-gcc --version
 ```
 
 
@@ -265,6 +265,7 @@ $ git --version
 ## Visual Studio Code
 
 Para baixar, acesse [esse link](https://code.visualstudio.com/).
+
 
 ## STM32 Cube Programmer
 
