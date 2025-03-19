@@ -11,14 +11,15 @@
     - [Instalação no Windows](#instalação-no-windows)
     - [Instalação no Linux](#instalação-no-linux)
   - [arm-none-eabi-gcc](#arm-none-eabi-gcc)
-    - [Instalação no Windows](#instalação-no-windows-1)
-    - [Instalação no Linux](#instalação-no-linux-1)
+    - [Instalação WSL/Linux](#instalação-WSL/Linux-1)
+  - [G++](#G++)
+    - [Instalação WSL/Linux](#instalação-WSL/Linux-2) 
   - [Make](#make)
-    - [Instalação no Windows](#instalação-no-windows-2)
-    - [Instalação no Linux](#instalação-no-linux-2)
-  - [Git](#git)
-    - [Instalação no Windows](#instalação-no-windows-3)
-    - [Instalação no Linux](#instalação-no-linux-3)
+    - [Instalação WSL/Linux](#instalação-WSL/Linux-3) 
+  - [CMake](#CMake) 
+    - [Instalação WSL/Linux](#instalação-WSL/Linux-4) 
+  - [Git](#GIT)
+    - [Instalação WSL/Linux](#instalação-WSL/Linux-5)
   - [Visual Studio Code](#visual-studio-code)
   - [STM32 Cube Programmer](#stm32-cube-programmer)
 - [STM32 Project Template](#stm32-project-template)
@@ -51,6 +52,9 @@
     - [Windows](#windows)
     - [Linux](#linux)
   - [Instalando MSYS2 no Windows](#instalando-msys2-no-windows)
+  - [Virtualização da BIOS](#Habilitando-a-virtualização-na-BIOS)
+  - [Instalando o WSL](#Instalando-o-WSL)
+
 
 ---
 
@@ -163,71 +167,107 @@ Categories=Development;Electronics;
 ```
 
 ## arm-none-eabi-gcc
+O arm-none-eabi-gcc é usado para compilar programas para microcontroladores em ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos embarcados com o STM32.
 
-Esse é o compilador de C para ARM e é necessário tê-lo para compilar os
-programas. Para baixá-lo, acesse [esse
-link](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads).
+### Instalação WSL/Linux
 
-### Instalação no Windows
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
 
-Baixe a versão mais recente para seu sistema e execute o instalador.
+Abra o terminal do Ubuntu e insira o comando:
 
-Após a instalação, coloque o local dos executáveis no Path [(Apêndice
-2)](#colocando-caminhos-no-path). O local padrão no Windows é `C:\Program Files
-(x86)\GNU Tools Arm Embedded\7 2018-q2-update\bin`.
-
-### Instalação no Linux
-
-Baixe o arquivo `.tar.bz2` e extraia usando o comando:
+```
+sudo apt install -y gcc-arm-none-eabi
+```
+Para garantir que o GCC foi instalado corretamente, verifique a versão:
 
 ```bash
-$ tar xjvf gcc-arm-none-eabi-*.tar.bz2
+arm-none-eabi-gcc --version
 ```
 
-Mova a pasta gerada para qualquer lugar que desejar.
 
-Após a instalação é necessário colocar os executáveis no PATH [(Apêndice
-2)](#colocando-caminhos-no-path). Eles estão na pasta bin, dentro da pasta
-extraída.
+## G++
+
+O g++ é um compilador de C++ que faz parte da coleção GNU Compiler Collection (GCC). Ele é usado tanto no Windows quanto no Linux para compilar e gerar programas escritos em C++. 
+
+### Instalação WSL/Linux
+
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+
+Abra o terminal do Ubuntu e insira o comando:
+
+```bash
+sudo apt install g++
+```
+Quando for compilar, esteja na pasta onde está o programa que você quer compilar e use:
+
+````bash
+g++ arquivo_main.cpp arquivo_funções.cpp -o nome_do_executavel.exe
+````
+
+
 
 ## Make
 
-Para poder compilar com mais facilidade, é necessário ter o make instalado.
+No Linux, Make é usado para automatizar o processo de compilação e construção de projetos de software. 
 
-### Instalação no Windows
+### Instalação WSL/Linux
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
 
-Baixe pelo MSYS2 [(Apêndice 3)](#instalando-msys2-no-windows).
-
-### Instalação no Linux
-
-Instale pelo gerenciador de pacotes. No caso do Ubuntu:
+Abra o terminal do Ubuntu e insira o comando:
+```bash
+sudo apt install make
+```
+Para garantir que tudo foi instalado corretamente, verifique a versão:
 
 ```bash
-$ sudo apt install make
+make --version
 ```
 
-## Git
 
-Para pegar o STM32 Project Template e fazer o controle de versão.
+## CMake
 
-### Instalação no Windows
+CMake é uma ferramenta de automação de construção, semelhante ao make, mas com maior flexibilidade e modernidade.
 
-Para baixar acesse [esse link](https://git-scm.com/downloads).
+### Instalação WSL/Linux
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
 
-Execute o instalador. Deixe as opções padrões, assim o local de instalação já
-será adicionado ao Path.
+Abra o terminal do Ubuntu e insira o comando:
 
-### Instalação no Linux
-
-Instale pelo gerenciador de pacotes. No caso do Ubuntu:
 
 ```bash
-$ sudo apt install git
+sudo apt install cmake
 ```
+Para garantir que tudo foi instalado corretamente, verifique a versão:
+
+```bash
+cmake --version
+```
+
+## GIT
+
+Git é um sistema de controle de versão distribuído. Ele serve para rastrear alterações em arquivos, especialmente em projetos de desenvolvimento de software, permitindo que várias pessoas trabalhem simultaneamente sem perder histórico.
+
+### Instalação WSL/Linux
+
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+>
+Abra o terminal do Ubuntu e insira o comando:
+
+```bash
+$ sudo apt install git 
+```
+
+Para garantir que tudo foi instalado corretamente, verifique a versão:
+
+```bash
+$ git --version
+```
+
 
 ## Visual Studio Code
 
 Para baixar, acesse [esse link](https://code.visualstudio.com/).
+
 
 ## STM32 Cube Programmer
 
@@ -1637,3 +1677,57 @@ diferenças nas saídas).
 
 Se a saída no Prompt de Comando foi parecida com essa, pronto. Você terminou de
 instalar as ferramentas do MSYS2 que utilizamos.
+
+    
+## Habilitando a virtualização na BIOS   
+Para que seja possível a instalação do WSL, primeiro é necessário que a virtualização da BIOS/UEFI esteja habilitada. A virtualização permite que o seu dispositivo Windows emule um sistema operativo diferente, como Android ou Linux. 
+Para saber este status na sua máquina, abra o gerenciador de tarefas, vá para desempenho e olhe naquelas informações ali em baixo:
+
+![virtualização ON](https://github.com/user-attachments/assets/4109eded-9a59-48f6-bf46-1b09f19a6374)
+
+Se já está habilitado, prossiga para o passo 1 da [instalação do WSL](#Instalando-o-WSL). 
+Caso contrário, acesse este [guia](#https://support.microsoft.com/pt-br/windows/ativar-a-virtualiza%C3%A7%C3%A3o-no-windows-c5578302-6e43-4b4b-a449-8ced115f58e1) da Microsoft pelo seu celular e siga o passo a passo no seu computador.
+    
+:::warning
+:warning: Será necessário fazer alterações na sua UEFI/BIOS. Caso não esteja acostumado com isso, peça ajuda aos veteranos.
+:::    
+    
+Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior.
+
+
+    
+## Instalando o WSL
+
+WSL (Windows Subsystem for Linux) é uma funcionalidade do Windows que permite a execução de aplicativos e comandos do Linux Ubuntu diretamente no terminal do Windows.
+
+0. Primeiro verifique se a virtualização da sua máquina está habilitada clicando [aqui](#Habilitando-a-virtualização-na-BIOS)
+
+1. Com o passo anterior concluido, vamos ativar o WSL. Vá em:
+
+painel de controle -> programas -> ativar ou desativar recursos do Windows  
+
+Habilite as 3 opções a seguir:
+- [X] Plataforma de máquina virtual
+- [X] Plataforma do hipervisor do Windows
+- [X] Subsistema do Windows para Linux
+
+Reinicie seu compiuter.
+
+2. Depois de reiniciado, abra o PowerShell como Administrador, insira o comando e aguarde a instalação:
+    
+```powershell
+wsl --install -d Ubuntu
+```
+    
+3. Agora com o Ubuntu instalado, feche o powershell e abra o Ubuntu pesquisando-o no menu Iniciar. Um terminal abrirá e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
+
+4. Agora atualize os pacotes do sistema:
+    
+```bash
+$ sudo apt update && sudo apt upgrade -y
+```
+
+Beleza por aqui era só. 
+    
+>Voltar para o [índice](#Índice)       
+>Consultar [Referência](https://learn.microsoft.com/pt-br/windows/wsl/install#prerequisites)
