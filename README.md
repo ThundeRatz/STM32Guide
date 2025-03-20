@@ -100,7 +100,7 @@ Seguindo as instruções da tela, copie o caminho em que o CubeMX será instalad
 
 ![Cube installation path](media/cube_installation_path.png)
 
-Para poder usar o CubeMX no WSL, precisamos configurar o `CUBE_PATH` dentro dele. Para isso, execute o comando `code ~/.bashrc` no terminal do WSL e insira, no final do arquivo que aparecer no VSCode, essa linha: `export CUBE_PATH="/mnt/c/"`, colocando depois dessa ultima barra o caminho de instalação do CubeMX que você copiou na etapa anterior, lembrando de uniformizar as barras do caminho (ou seja, todas inclinadas para a direita) e retirar o `C:\`. Abaixo temos um exemplo:
+Para poder usar o CubeMX no WSL, precisamos configurar o `CUBE_PATH` dentro dele. Para isso, execute o comando `code ~/.bashrc` no terminal do WSL e insira, no final do arquivo que aparecer no VSCode, essa linha: `export CUBE_PATH="/mnt/c/"`, colocando depois dessa ultima barra o caminho de instalação do CubeMX que você copiou na etapa anterior, lembrando de uniformizar as barras do caminho (ou seja, todas inclinadas para a direita) e retirar o `C:\`, depois disso salve o arquivo. Abaixo temos um exemplo:
 
 ![Cube path](media/cube_path.png)
 
@@ -288,9 +288,9 @@ Em uma das etapas da instalação, vai ser configurado o caminho que o Cube Prog
 
 Selecionando as opções padrão de instalação, aceitando os termos e instalando os drivers necessários para o Cube Programmer funcionar, podemos configurá-lo no WSL.
 
-Para isso, no terminal do WSL, digite `code ~/.bashrc` e coloque no final do arquivo aberto `export PATH=$PATH:"/mnt/c/` colocando depois da ultima barra o caminho copiado na etapa anterior (e mudando as barras para serem todas inclinadas para a direita). Ao colar o caminho copiado é importante retirar o `C:\` do inicio e adicionar `/bin` no final do caminho copiado, ficando parecido com a imagem abaixo:
+Para isso, no terminal do WSL, digite `code ~/.bashrc` e coloque no final do arquivo aberto `export PATH=$PATH:"/mnt/c/` colocando depois da ultima barra o caminho copiado na etapa anterior (e mudando as barras para serem todas inclinadas para a direita). Ao colar o caminho copiado é importante retirar o `C:\` do inicio e adicionar `/bin` no final do caminho copiado e salvar o arquivo. Abaixo temos um exemplo de como ficaria:
 
-![Cube programmer path](cube_programmer_path.png)
+![Cube programmer path](media/cube_programmer_path.png)
 
 Após isso, no terminal do WSL digite `source ~/.bashrc` e em seguida `STM32_Programmer_CLI.exe -l`, se tudo foi configurado corretamente, o comando vai retornar a versão do Cube Programmer e outras coisas.
 
