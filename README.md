@@ -46,9 +46,9 @@
   - [Extras](#extras)
 - [CMake e Makefile](#cmake-e-makefile)
   - [Make/Makefile](#makemakefile)
-  - [Cmake](#cmake)
-  - [Instalando CMake no linux](#instalando-cmake-no-linux)
-  - [Configuração inicial do CMakeLists](#configuração-inicial-do-cmake)
+  - [CMake](#cmake)
+  - [Instalando CMake no Linux](#instalando-cmake-no-linux)
+  - [Configuração inicial do CMake](#configuração-inicial-do-cmake)
   - [Compilando e executando o projeto](#compilando-e-executando-o-projeto)
 - [Apêndices](#apêndices)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
@@ -1463,9 +1463,9 @@ cd build #entra na pasta `build`
 cmake ..
 ```
 
-> Esta versão do comando (`cmake ..`) utiliza o CMakeLists da pasta anterior(principal do projeto), mas cria os arquivos na pasta build.
+> Esta versão do comando (`cmake ..`) utiliza o CMakeLists da pasta anterior (principal do projeto), mas cria os arquivos na pasta build.
 
-> Note que só é necessário criar a pasta`build` se ela ainda não tiver sido criada.
+> Note que só é necessário criar a pasta `build` se ela ainda não tiver sido criada.
 
 Depois disso podemos usar o Make, que tem vários comandos, listados [aqui](https://github.com/ThundeRatz/STM32ProjectTemplate/blob/develop/cmake/templates/helpme.in), sendo os principais:
 
