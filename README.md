@@ -168,6 +168,7 @@ WSL (Windows Subsystem for Linux) é uma funcionalidade do Windows que permite a
 
 painel de controle -> programas -> ativar ou desativar recursos do Windows
 Essa janela que queremos:
+
 ![{19C896B0-BB52-433C-9EC1-6171DF9FAE59}](https://github.com/user-attachments/assets/b5a22fe1-3dbf-4a2e-aabb-a130933dafd1)
 
 
@@ -207,7 +208,7 @@ Beleza, WSL instalado.
 ### Instalação WSL e Linux
 
 >[!Warning] 
->Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
 
 Abra o terminal do Ubuntu e insira o comando:
 ```
@@ -235,7 +236,7 @@ Git é um sistema de controle de versão distribuído. Ele serve para rastrear a
 ### Instalação WSL e Linux
 
 >[!Warning] 
->Se você está no Windows e ainda não instalou o WSL, clique [aqui](#Instalando-o-WSL).
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
 
 Abra o terminal do Ubuntu e insira o comando:
 
@@ -1678,6 +1679,6 @@ Caso contrário, acesse este [guia](https://support.microsoft.com/pt-br/windows/
 >[!Warning] 
 >Será necessário fazer alterações na sua UEFI/BIOS. Caso não esteja acostumado com isso, peça ajuda aos veteranos.
     
-Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior. Se deu tudo certo, prossiga para a [instalação do WSL](#instalando-o-wsl).
+Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior. Se deu tudo certo, prossiga para a [instalação do WSL](#wsl).
 
 >Voltar para o [índice](#Índice)    
