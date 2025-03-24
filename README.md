@@ -438,6 +438,10 @@ Começando pelo Cube, algumas configurações adicionais serão necessárias, ma
 atenção, pois nem todos os pinos podem executar todas as funções, portanto, é importante 
 checar na hora de projetar uma placa para que todos os pinos tenham as funções desejadas.
 
+Como exemplo, vamos configurar o **ADC1**, por isso vamos chamar as funções relacionadas a esse ADC, 
+como **ADC1_IN1** (que será explicado abaixo). Se tivessemos usando outro ADC, exemplo "ADC3", usariamos
+a função ADC3_IN3, portanto, usem as funções adequadas para cada ADC que forem usar.
+
 ![Cube select ADC pin function](media/cube_select_pin_function_adc.png)
 
 Ao selecionar um pino como ADC (nesse caso PA0), ele ficará laranja, indicando
