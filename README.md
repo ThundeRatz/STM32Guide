@@ -80,9 +80,7 @@ específicas estarão em suas respectivas seções.
 
 ### Instalação no Windows
 
-Vamos usar a versão 6.13 do CubeMX. Clique em "Get Software" e selecione a versão 6.13 em "Select version".
-
-![Cube windows installation](media/cubemx_download.png)
+Clique em "Get Software" e baixe a última versão disponível em "Get Latest".
 
 Antes de poder baixar o software é necessário estar logado em uma conta da ST. Caso não tenha, crie uma antes de continuar.
 
@@ -92,11 +90,37 @@ Seguindo as instruções da tela, copie o caminho em que o CubeMX será instalad
 
 ![Cube installation path](media/cube_installation_path.png)
 
-Para poder usar o CubeMX no WSL, precisamos configurar o `CUBE_PATH` dentro dele. Para isso, execute o comando `code ~/.bashrc` no terminal do WSL e insira, no final do arquivo que aparecer no VSCode, essa linha: `export CUBE_PATH="/mnt/c/"`, colocando depois dessa ultima barra o caminho de instalação do CubeMX que você copiou na etapa anterior, lembrando de uniformizar as barras do caminho (ou seja, todas inclinadas para a direita) e retirar o `C:\`, depois disso salve o arquivo. Abaixo temos um exemplo:
+Para poder usar o CubeMX no WSL, precisamos configurar o `CUBE_PATH` dentro dele. Para isso, execute o seguinte comando no terminal do Ubuntu:
+
+```bash
+ code ~/.bashrc
+```
+
+No arquivo que abrir, coloque a seguinte linha no final do arquivo:
+
+```bash
+ export CUBE_PATH="/mnt/c/'caminho que voce copiou na instalação do cubemx"
+```
+
+Complete o comando com o caminho que você copiou anteriormente, lembrando de retirar `C:\` do caminho copiado e colocar todo o comando com barras inclinadas para a direita `/`.
 
 ![Cube path](media/cube_path.png)
 
-Volte no terminal do WSL e dê `source ~/.bashrc`, em seguida digite `echo $CUBE_PATH` para verificar se o `CUBE_PATH` foi definido corretamente com o caminho colocado.
+Em seguida, volte no terminal do Ubuntu e dê o seguinte comando 
+
+```bash
+ source ~/.bashrc
+```
+
+Para verificar se o `CUBE_PATH` foi configurado, execute o seguinte comando:
+
+```bash
+ echo $CUBE_PATH
+```
+
+Se tudo deu certo, o caminho do `CUBE_PATH` vai ser mostrado. No nosso exemplo retornaria:
+
+`/mnt/c/Program Files/STMicroelectronics/STM32Cube/STM32CubeMX`
 
 ### Instalação no Linux
 
@@ -177,7 +201,7 @@ Habilite estas 3 opções:
 - [X] Plataforma do hipervisor do Windows
 - [X] Subsistema do Windows para Linux
 
-Reinicie seu compiuter.
+Reinicie seu computador.
 
 2. Depois de reiniciado, abra o PowerShell como Administrador, insira o comando e aguarde a instalação:
     
@@ -185,20 +209,21 @@ Reinicie seu compiuter.
 wsl --install -d Ubuntu
 ```
     
-3. Agora com o Ubuntu instalado, feche o powershell e abra o Ubuntu pesquisando-o no menu Iniciar. Um terminal abrirá e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
+3. Agora com o Ubuntu (nossa distribuição de sistema Linux) instalado, feche o Powershell e abra o Ubuntu pesquisando-o no menu Iniciar. Um terminal abrirá e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
 
 4. Agora atualize os pacotes do sistema:
     
 ```bash
 $ sudo apt update && sudo apt upgrade -y
 ```
+
 Beleza, WSL instalado. 
    
 >[Referência](https://learn.microsoft.com/pt-br/windows/wsl/install#prerequisites)
 
 
 ## Compiladores
-### arm-none-eabi-gcc, Make e CMake
+### Make, CMake e arm-none-eabi-gcc 
 **arm-none-eabi-gcc** é usado para compilar programas para microcontroladores em ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos embarcados com o STM32.
 
 **Make** é usado para automatizar o processo de compilação e construção de projetos de software. 
@@ -228,7 +253,6 @@ Deve estar parecido com a imagem a seguir.
 ![{B5782A61-20D6-425B-9CAF-82E2A8BAEDB1}](https://github.com/user-attachments/assets/b101e354-601f-4249-a825-54713acf720e)
 
 
-
 ## Git
 
 Git é um sistema de controle de versão distribuído. Ele serve para rastrear alterações em arquivos, especialmente em projetos de desenvolvimento de software, permitindo que várias pessoas trabalhem simultaneamente sem perder histórico.
@@ -250,8 +274,6 @@ Para certificar que o git foi instalado corretamente, verifique a versão:
 git --version
 ```
 
-
-
 ## Visual Studio Code
 
 Para baixar, acesse [esse link](https://code.visualstudio.com/).
@@ -270,17 +292,51 @@ Clique em "Get Software" e baixe a ultima versão do Cube Programmer. Note que h
 
 Extraia o executável da pasta zip baixada e execute-o.
 
-Em uma das etapas da instalação, vai ser configurado o caminho que o Cube Programmer será instalado. Copie esse caminho, que mais tarde vai ser necessário para configurá-lo no WSL.
+Em uma das etapas da instalação, vai ser configurado o caminho que o Cube Programmer será instalado. Copie esse caminho, que mais tarde vai ser necessário para configurá-lo no Ubuntu.
 
 ![Cube programmer installation path](media/cube_programmer_installation_path.png)
 
-Selecionando as opções padrão de instalação, aceitando os termos e instalando os drivers necessários para o Cube Programmer funcionar, podemos configurá-lo no WSL.
+Selecionando as opções padrão de instalação, aceitando os termos e instalando os drivers necessários para o Cube Programmer funcionar, podemos configurá-lo no Ubuntu.
 
-Para isso, no terminal do WSL, digite `code ~/.bashrc` e coloque no final do arquivo aberto `export PATH=$PATH:"/mnt/c/` colocando depois da ultima barra o caminho copiado na etapa anterior (e mudando as barras para serem todas inclinadas para a direita). Ao colar o caminho copiado é importante retirar o `C:\` do inicio e adicionar `/bin` no final do caminho copiado e salvar o arquivo. Abaixo temos um exemplo de como ficaria:
+Para isso, no terminal do Ubuntu, digite o seguinte comando:
+
+```bash
+ code ~/.bashrc 
+```
+ 
+No arquivo que abrir, coloque a seguinte linha no final desse arquivo:
+
+```bash
+ export PATH=$PATH:"/mnt/c/'caminho que voce copiou na instalação do cubeprogrammer'
+```
+
+Complete o comando com o caminho que você copiou na etapa anterior, retirando o `C:/` e colocando no final do caminho `/bin`. É importante verificar também se o caminho está com todas as barras que dividem as pastas inclinadas para a direita `/`.
+
+Abaixo temos um exemplo de como ficaria:
 
 ![Cube programmer path](media/cube_programmer_path.png)
 
-Após isso, no terminal do WSL digite `source ~/.bashrc` e em seguida `STM32_Programmer_CLI.exe -l`, se tudo foi configurado corretamente, o comando vai retornar a versão do Cube Programmer e outras coisas.
+Após isso, no terminal do Ubuntu digite 
+
+```bash
+ source ~/.bashrc
+``` 
+
+E para verificar se o CubeProgrammer foi configurado, execute o seguinte comando: 
+
+```bash
+ STM32_Programmer_CLI.exe -l
+```
+
+Algo parecido deve aparecer:
+
+```bash
+ -------------------------------------------------------------------
+                        STM32CubeProgrammer v2.2.1
+ -------------------------------------------------------------------
+
+STM32CubeProgrammer version: 2.2.1
+```
 
 ### Instalação no Linux
 
@@ -1511,42 +1567,9 @@ PATH é uma variável protegida do sistema (Windows, Linux e Mac) e contém uma
 lista de pastas. Quando um comando é executado, o sistema procura os arquivos
 necessários nas pastas listadas no PATH do usuário e do sistema.
 
-### Windows
-
-Para alterar o PATH do Windows, aperte a tecla do Windows e digite “env” (de
-environment variables) que aparecerá a opção de editar as variáveis de ambiente.
-
-![Cube set path 1](media/set_path_1.png)
-
-Na janela que abrir, clique em Variáveis de Ambiente.
-
-![Cube set path 2](media/set_path_2.png)
-
-Localize a variável PATH e clique duas vezes:
-
-![Cube set path 3](media/set_path_3.png)
-
-Aperte o botão New e digite no espaço em branco qual o caminho que deve ser
-adicionado. Se mais de um caminho deve ser adicionado, é possível colocá-los no
-mesmo espaço, separando-os com ponto e vírgula (recomenda-se colocar um caminho
-por vez, clicando em New a cada adição)
-
-![Cube set path 4](media/set_path_4.png)
-
-É importante ressaltar que o sistema irá procurar nessas pastas na ordem que
-estão na variável Path. Ou seja, se duas dessas pastas possuírem algo com o
-mesmo nome, a que estiver antes na variável Path será a utilizada. Por exemplo,
-se existirem duas instalações de make distintas e as duas estiverem na Path, ao
-executar o comando make no Prompt de Comando será utilizado o make da instalação
-que estiver mais em cima na variável Path. Por isso, existem as opções de Mover
-para Cima e Mover para Baixo.
-
-*Voilà*! Apertando OK em todas as caixas de texto, a variável foi atualizada com
-sucesso. Para que a mudança faça efeito, deve-se reiniciar quaisquer sessões do
-cmd que estejam abertas. Caso o usuário não esteja usando o terminal, nada mais
-precisa ser feito.
-
 ### Linux
+
+Este tutorial também serve para configurar o PATH se você está utilizando o Linux pelo WSL com o adendo de que para o caminho das pastas, você deve adicionar `/mnt/c/` no começo para identificar que o arquivo está instalado no Windows e não no ambiente Linux do WSL.
 
 Para alterar o PATH no Linux, o modo pode ser diferente dependendo da shell
 utilizada. Aqui, mostraremos como é feito utilizando bash e fish. O procedimento
