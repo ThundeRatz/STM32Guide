@@ -36,10 +36,13 @@
   - [Geração de PWM limitada](#geração-de-pwm-limitada-(para-servos-e-ESCs))
   - [Leitura de PWM](#leitura-de-pwm)
 - [I²C](#ic)
-- [STM Studio](#stm-studio)
+- [STM32 Cube Monitor](#stm32-cube-monitor)
+  - [Configurações iniciais](#configurações-iniciais)
   - [Leitura de variáveis](#leitura-de-variáveis)
-  - [Escrita de variáveis](#escrita-de-variáveis)
-  - [Extras](#extras)
+  - [Fluxo de nós](#fluxo-de-nós)
+    - [O que é um nó?](#o-que-é-um-nó)
+    - [Explore a ferramenta!](#explore-a-ferramenta)
+- [Debug](#debug)
 - [Apêndices](#apêndices)
   - [Makefile STM32](#makefile-stm32)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
@@ -1434,101 +1437,102 @@ utilizando um Timeout 1000. Observe que utilizamos a flag para a função retorn
 0 caso dê algo de errado na comunicação com o master. Esta função é utilizada
 para retornar o valor lido pelo sensor.
 
-# STM Studio
+# STM32 Cube Monitor
 
-STM Studio é o programa de depuração da ST. Com ele é possível ler e escrever em variáveis do programa em tempo real, ou seja, enquanto está rodando na placa.
+O STM32 Cube Monitor é uma ferramenta oficial da ST que tem como objetivo o monitoramento e a depuração em tempo real. Nele, a partir de um editor gráfico baseado em fluxos, é possível realizar a visualização e modificação de variáveis, de forma simples e com painéis personalizados, contendo gráficos, tabelas e medidores.
 
-Para sua utilização, os passos que você deve fazer são os seguintes:
+Para sua utilização, os seguintes passos devem ser seguidos:
+
+## Configurações iniciais
+
+Ao abrir o programa pela primeira vez, algo do tipo aparecerá:
+
+![stm monitor 1](media/stm_monitor_1.png)
+
+Aperte as teclas `Ctrl + I`, vá em local, selecione o arquivo terminado em "BasicFlow.json" e clique em "importar".
+
+![stm monitor 2](media/stm_monitor_2.png)
+
+Então a seguinte tela deve ser exibida, e tudo está pronto para começar:
+
+![stm monitor 3](media/stm_monitor_3.png)
 
 ## Leitura de variáveis
 
-Ao abrir pela primeira vez, verá uma tela como essa:
+Antes de começar a leitura de variáveis do seu código, ele deve ter sido compilado e a variável deve ser do tipo global.
 
-![STM Studio 1](media/stmstudio_1.png)
+Ao clicar duas vezes no node escrito "myVariables", em "executable" clique no ícone `+`. Coloque o endereço para o arquivo do tipo ".elf" em "folder" e então selecione o arquivo em "file".
 
-Clique com o botão direito do Mouse sobre Display Variables Settings e clique em Import para importar as variáveis de interesse de um programa para o STM Studio.
+![stm monitor 4](media/stm_monitor_4.png)
 
-![STM Studio 2](media/stmstudio_2.png)
+Em "variable list" selecione as variáveis que serão lidas, e clique em feito.
 
-Em Executable Variables clique nas reticências e localize o arquivo que contém as variáveis.
+![stm monitor 5](media/stm_monitor_5.png)
 
-Tal arquivo é gerado na compilação de seu programa e pode assumir três formatos .elf  ou .out ou .axf  dependendo de onde compilou seu programa.
+Com o ST-link ou JLink conectado ao computador, clique duas vezes em "myProbe_Out", no ícone `+` e selecione o Link.
 
-Se foi compilado das maneiras descritas por esse documento, o arquivo terá extensão .elf e estará localizado na pasta build do seu projeto.
+![stm monitor 6](media/stm_monitor_6.png)
 
-![STM Studio 3](media/stmstudio_3.png)
+Em "myProbe_In" selecione o mesmo já configurado anteriormente.
 
-Nessa tela, é possível ver todas as variáveis globais do seu programa e escolher as de interesse.
+Clique em feito, depois em "deploy" e "dashboard". Agora ao clicar em "START ACQUISITION", as suas variáveis aparecerão no gráfico.
 
-Se selecionar a opção Expand table elements é possível escolher um item de determinado vetor, que não seria possível sem essa opção. Assim, no exemplo a seguir, pegarei as variáveis responsáveis por armazenar o valor de três sensores, em que, cada um é um item de um vetor.
+![stm monitor 7](media/stm_monitor_7.png)
 
-Após selecionar todas as variáveis que deseja, clique em Import e deverá ver que elas apareceram em Display Variables Settings.
+Clicando no "nó" chamado "myChart", é possível alterar o tipo de gráfico, tamanho, limites, etc.
 
-![STM Studio 4](media/stmstudio_4.png)
+## Fluxo de nós
 
-Com isso feito clique nas variáveis que deseja observar, clique com o botão direito, e no menu que aparecer, clique em Send to >> Var View 1.
+No monitor é utilizado um sistema de nós (nodes) que permite criar fluxos de monitoramento de dados, que além do que já foi mostrado, também permite a criação de "dashboards" interativos e avançados.
 
-Com isso, sua variável poderá ser visualizada em tempo real em três modos distintos: em tabela, graficamente e em um gráfico de barras.
+### O que é um nó?
 
-O modo de visualização, pode ser selecionado no quadro no inferior esquerdo da tela em Viewers settings >> Display >> VarViewer1 as.
+Os nós são blocos modulares que representam funções específicas. Eles podem ser conectados para criar um fluxo de dados.
 
-![STM Studio 5](media/stmstudio_5.png)
+Existem 3 principais tipos de nó:
 
-Feito isso já será possível visualizar suas variáveis em tempo real.
+- Nó de entrada: Capturam os dados diretamente.
+- Nós de processamento: Aqueles capazes de realizar operações, filtrar ou transformar dados.
+- Nó de saída: Exibe os dados, com gráficos, tabelas, etc.
 
-Para isso, basta ligar a placa no computador com o gravador e selecionar play.
+### Explore a ferramenta!
 
-Certifique-se que a opção ST-link SWD esteja selecionada, caso esteja usando os gravadores ST-LINK  que temos na gaiola.
+Os nodes são ferramentas potentes capazes de criar funções, filtros, avisos, alertas, automações.
+As possibilidades são imensas, explore para usar ao seu favor!
 
-![STM Studio 6](media/stmstudio_6.png)
+# Debug
 
-Abaixo, imagens de exemplo da visualização de variáveis na vista barras e de gráfico:
+É possível depurar utilizando [`gdb`](https://www.gnu.org/software/gdb/) no linux.
+Primeiramente para instalar rode:
 
-![STM Studio 7](media/stmstudio_7.png)
+```
+sudo apt install gdb-multiarch
+```
 
-![STM Studio 8](media/stmstudio_8.png)
+Para depurar o projeto, ao rodar `cmake`, é necessário usar o `BUILD_TYPE=Debug`, como exemplo:
 
-Cada uma das vistas pode ser mais ou menos útil em determinada situação.
+```
+cmake .. -DBUILD_TYPE=Debug
+```
 
-Nessas vistas, atalhos que podem ser úteis são os de zoom. Use a roda do mouse para aumentar ou diminuir o zoom.
+E para gerar os arquivos para depuração, rode:
 
-Além disso é possível dar um auto zoom nos valores das suas variáveis clicando com o botão direito do mouse no gráfico e depois nessa opção.
+```
+make debug
+```
 
-## Escrita de variáveis
+Também é possível depurar testes, utilizando:
 
-Para se inscrever em determinada variável do programa, os passos são bem semelhantes aos de escrita. Para isso, basta ir na aba de Write variables, importar a variável como descrito anteriormente. Após isso, pode-se escrever o valor desejado, como se mostra abaixo no exemplo.
+```
+make debug_[test_name]
+```
 
-![STM Studio 1](media/stmstudio_9.png)
+Para realmente depurar o projeto, a [Extensão Cortex Debug](https://marketplace.visualstudio.com/items?marus25.Cortex-Debug) para VSCode deve estar instalada. Para cada tipo de depuração, deve-se utilizar o server gdb respectivo.
 
-## Extras
 
-Até aqui já é possível fazer quase todos os casos de interesse. Aqui apenas algumas opções a mais e alguns possíveis problemas.
-
-* Para mexer em configurações mais avançadas como taxa de aquisição, pode-se selecionar o menu de Acquisition Settings (ícone do lado de play na versão atual) e verá algumas opções que pode mexer se desejar alguma taxa de aquisição específica:
-
-![STM Studio 1](media/stmstudio_10.png)
-
-* Note que na imagem acima tem a opção de escolher a localização de uma Log File. Tal arquivo salva os dados da última vez que usou o STM Studio e pode ser útil. Para abrir o Log basta ir na pasta especificada.
-
-* As vezes, quando mexe-se em uma variável no programa, compila-se novamente e vai usar no STM Studio quando essa variável já estava aberta, é necessário dar um update na variável. Isso por que as vezes a variável fica com o endereço antigo e não pega as mudanças feitas. Para isso clicar com o botão direito e depois em update.
-
-![STM Studio 1](media/stmstudio_11.png)
-
-* Lembre que para gravar um novo programa em sua placa é necessário parar a depuração do STM Studio. O botão de Play vira um botão de Stop enquanto o programa está rodando.
-
-* É possível visualizar suas variáveis de um último modo que é a visualização em um plano 2D. Para isso, no Menu Views selecione Point Viewer. No canto inferior esquerdo em Point Viewer coloque as variáveis que deseja que apareça nos eixos X e Y.
-
-![STM Studio 1](media/stmstudio_12.png)
-
-* É possível criar expressões com suas variáveis e visualizar o valor de tais expressões. Para isso, clique com o botão direito do mouse em new como na imagem a seguir.
-
-![STM Studio 1](media/stmstudio_13.png)
-
-* Com isso, crie sua função na página que se abrir. No exemplo colocarei, ranges[0] + ranges[1]:
-
-![STM Studio 1](media/stmstudio_14.png)
-
-Basta digitar a expressão. Não é para clicar nos símbolos. Eles servem apenas de referência do que é possível fazer.
+- [J-Link](https://www.segger.com/downloads/jlink/)
+- [OpenOCD](https://openocd.org/) (`sudo apt install openocd`)
+- [ST-Util](https://github.com/stlink-org/stlink) (`sudo apt install stlink-tools`)
 
 # Apêndices
 
