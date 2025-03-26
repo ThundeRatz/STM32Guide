@@ -44,8 +44,13 @@
   - [Leitura de variáveis](#leitura-de-variáveis)
   - [Escrita de variáveis](#escrita-de-variáveis)
   - [Extras](#extras)
+- [CMake e Makefile](#cmake-e-makefile)
+  - [Make/Makefile](#makemakefile)
+  - [CMake](#cmake)
+  - [Instalando CMake no Linux](#instalando-cmake-no-linux)
+  - [Configuração inicial do CMake](#configuração-inicial-do-cmake)
+  - [Compilando e executando o projeto](#compilando-e-executando-o-projeto)
 - [Apêndices](#apêndices)
-  - [Makefile STM32](#makefile-stm32)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
     - [O que é PATH](#o-que-é-path)
     - [Windows](#windows)
@@ -1423,36 +1428,68 @@ Até aqui já é possível fazer quase todos os casos de interesse. Aqui apenas 
 
 Basta digitar a expressão. Não é para clicar nos símbolos. Eles servem apenas de referência do que é possível fazer.
 
+# CMake e Makefile
+
+Compilar apenas um arquivo em c++ é bastante simples, geralmente basta um comando no terminal. Mas para projetos maiores, como os desenvolvidos na equipe, nos quais o código está distribuído em vários arquivos, e principalmente várias pastas, fica mais complicado. Para isso existem ferramentas como o Make.
+## Make/Makefile
+O Make consegue compilar um arquivo principal (que tem a função main) e suas dependências com um só comando, e também gravar ele no microcontrolador. Para isso, ele precisa de um arquivo de texto Makefile, que contém instruções para o Make conseguir achar os arquivos e as dependências deles. Apesar de ser muito prático utilizar essa ferramenta, criar e manter o Makefile é trabalhoso e complicado, então para isso utilizamos também o CMake.
+
+## CMake
+Com o CMake conseguimos criar um Makefile a partir de outro arquivo de instruções (CMakeLists.txt). Embora pareça redundante criar instruções para criar outro arquivos de instruções, o CMakeLists é muito mais simples de ser criado e alterado.
+
+## Instalando CMake no Linux
+Para instalar, basta rodar no terminal o comando:
+```bash
+sudo apt install cmake
+```
+
+> [!IMPORTANT]
+> Os tópicos seguintes são voltados para projetos que utilizam o nosso [template](https://github.com/ThundeRatz/STM32ProjectTemplate)
+
+## Configuração inicial do CMake
+
+Ao iniciar um projeto com o template, algumas configurações devem ser feitas no CmakeLists principal do repositório, indicado na imagem:
+
+![CMake Main File](media/cmake_main_file.png)
+
+Abrindo esse arquivo você encontrará algo como isso:
+
+![CMake Variables](media/cmake_project_variables.png)
+
+Nos dois locais indicados você deve inserir o nome do seu projeto e a versão da eletrônica dele. Isso é importante porque o CMake vai procurar na pasta cube um arquivo ioc (aquele feito no CubeMX) chamado "nome"_"versão", para gerar os arquivos necessários. No exemplo da imagem, seria example_v0.ioc
+
+Note que se for reprojetar a placa do seu projeto, você terá um novo cube(ex: example_v1.ioc), e então terá que voltar ao CmakeLists e trocar o BOARD_VERSION para v1.
+## Compilando e executando o projeto
+O principal comando do CMake é:
+```bash
+cmake .
+ ```
+Esse comando prepara tudo que é necessário para compilar o código em seguida. Porém com isso ele cria muitos arquivos, e isso pode poluir seu diretório.
+
+Para evitar isso, nós usamos uma pasta chamada `build` onde o comando deve ser executado e que deve ser criada manualmente:
+```bash
+mkdir build #cria a pasta `build`
+cd build #entra na pasta `build`
+cmake ..
+```
+
+> Esta versão do comando (`cmake ..`) utiliza o CMakeLists da pasta anterior (principal do projeto), mas cria os arquivos na pasta build.
+
+> Note que só é necessário criar a pasta `build` se ela ainda não tiver sido criada.
+
+Depois disso podemos usar o Make, que tem vários comandos, listados [aqui](https://github.com/ThundeRatz/STM32ProjectTemplate/blob/develop/cmake/templates/helpme.in), sendo os principais:
+
+`make cube` : gera os arquivos do cube (igual o Generate Code do CubeMX)
+
+`make` : compila o arquivo main.cpp (da pasta src)
+
+`make flash` : compila e grava(passa as intruções para o microcontrolador) o arquivo main.cpp (que deve estar na pasta src)
+
+`make TEST_NAME` : compila o arquivo de teste com o nome indicado (que deve estar em uma subpasta de test/src. Por exemplo, test/src/proxy/TEST_NAME.cpp)
+
+`make flash_TEST_NAME` : compila e grava o arquivo de teste com o nome indicado (que deve estar em uma subpasta de test/src. Por exemplo, test/src/proxy/TEST_NAME.cpp)
+
 # Apêndices
-
-## Makefile STM32
-
-O Makefile utilizado pela equipe encontra-se no STM32ProjectTemplate no GitHub
-[aqui](https://github.com/ThundeRatz/STM32ProjectTemplate/blob/master/Makefile).
-
-É preciso apenas alterar as variáveis `DEVICE_FAMILY`, `DEVICE_TYPE`, `DEVICE`,
-`DEVICE_LD` e `DEVICE_DEF` para se adequar ao microcontrolador usado no projeto.
-Os valores corretos dessas variáveis podem ser inferidos pelo Cube.
-
-O que está escrito no desenho do pinout é o valor de `DEVICE_LD`. Em `DEVICE`, o
-valor é o de `DEVICE_LD` sem os últimos dois caracteres (o “x” e outra letra).
-Em `DEVICE_FAMILY`, o valor é o valor de `DEVICE_LD` até o primeiro número após
-o F, seguido de xx. Em `DEVICE_TYPE`, o valor é o valor de `DEVICE_LD` até os
-três números após o F, seguido de xx. Em `DEVICE_DEF`, o valor é o valor de
-`DEVICE_TYPE`, seguido de x e, geralmente, o caractere que estiver duas posições
-antes do x em `DEVICE`. No nosso exemplo:
-
-![Cube microcontroller image](media/cube_microcontroller_image.png)
-
-Temos que `DEVICE_LD` é `STM32F303C6Tx`, `DEVICE` é `STM32F303C6`,
-`DEVICE_FAMILY` é `STM32F3xx`, `DEVICE_TYPE` é `STM32F303xx` e `DEVICE_DEF` é
-`STM32F303x6`.
-
-O valor de DEVICE_DEF pode ser visto também pelo nome de um arquivo gerado pelo
-Cube. `Em Drivers\CMSIS\Device\ST\STM32F3xx\Include` há um arquivo chamado
-stm32f303x6.h. O nome desse arquivo, sem o .h e com letras maiúsculas, é o valor
-de `DEVICE_DEF`. O valor de `DEVICE_LD` pode ser visto também pelo nome do
-arquivo .ld gerado pelo Cube.
 
 ## Colocando caminhos no PATH
 
