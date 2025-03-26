@@ -428,16 +428,19 @@ RESET (0) ou vice-versa.
 
 # ADC e DMA
 
-Não cabe explicar aqui o funcionamento detalhado de um ADC (Analog to Digital
-Converter) ou do DMA (Direct Memory Access), há vários recursos na internet para
-isso. O ADC serve basicamente para pegarmos valores contínuos de tensão, em
-nosso caso normalmente retornados por sensores e transformá-los em números que
-podemos trabalhar. O DMA ajuda a fazer isso de maneira mais rápida e automática.
+O ADC (Analog to Digital Converter) serve basicamente para pegarmos, em intervalos 
+regulares, os valores contínuos de tensão (em nosso caso normalmente retornados por 
+sensores) e transformá-los em números que podemos trabalhar (valores digitais). 
+O DMA ajuda a fazer isso de maneira mais rápida e automática. Aqui está um 
+[vídeo](https://youtu.be/xy9mMh7KYE8?si=4CUXsLmqLkxEOFI9) para você aprender mais sobre o ADC.
 
-Começando pelo Cube, a partir daqui configurações adicionais costumam ser
-necessárias e nem todos os pinos podem executar todas as funções, isso é muito
-importante de checar na hora de projetar uma placa, para que todos os pinos
-tenham as funções desejadas.
+Começando pelo Cube, algumas configurações adicionais serão necessárias, mas prestem 
+atenção, pois nem todos os pinos podem executar todas as funções, portanto, é importante 
+checar na hora de projetar uma placa para que todos os pinos tenham as funções desejadas.
+
+Como exemplo, vamos configurar o **ADC1**, por isso vamos chamar as funções relacionadas a esse ADC, 
+como **ADC1_IN1**, **MX_ADC1_Init()** (que será explicado abaixo), entre outros. Se tivessemos usando outro ADC, exemplo "ADC3", usariamos
+a função ADC3_IN3, MX_ADC3_Init(), portanto, usem as funções adequadas para cada ADC que forem configurar.
 
 ![Cube select ADC pin function](media/cube_select_pin_function_adc.png)
 
@@ -450,27 +453,33 @@ ADC1_IN2, que também será usado a seguir.
 
 ![Cube ADC configuration screen](media/cube_adc_config.png)
 
+Uma observação é que se não aparecer esta opção de mudar o modo do ADC1_IN1, significa 
+que ele já está configurado como "IN1 Single-ended", assim, não precisa fazer a parte
+citada acima.
+
+![Cube ADC configuration screen 2](media/cube_adc_config2.png)
+
 Após escolher um pino de ADC, aparecem algumas opções na parte "Configuration"
 abaixo. É necessário alterar algumas dessas opções para terminar de
 configurá-lo.
 
-Como dito, essa tela pode variar dependendo do uC e do pino escolhido, porque
-alguns uCs tem mais funcionalidades. Só é necessário mexer em algumas
+Como dito, **essa tela pode variar dependendo do uC e do pino escolhido, porque
+alguns uCs tem mais funcionalidades**. Só é necessário mexer em algumas
 configurações. Na maioria dos casos, queremos que o ADC seja lido continuamente,
-então é necessário ligar o Continuous Conversion Mode e o DMA Continuous
-Requests:
+então é necessário ligar o "Continuous Conversion Mode" e o "DMA Continuous
+Requests":
 
 ![Cube ADC configuring 1](media/cube_adc_configuring_1.png)
 
-Álém disso, deve-se mudar o Number of Conversion para a quantidade de canais que
-deve ser lido, nesse caso, 2. Ao mudar isso, o Scan Conversion Mode será ativado
-automaticamente e aparecerá novos menus“Rank” de acordo como quantidade
+Além disso, deve-se mudar o "Number of Conversion" para a quantidade de canais que
+deve ser lido, nesse caso, 2. Ao mudar isso, o "Scan Conversion Mode" será ativado
+automaticamente e aparecerá novos menus “Rank” de acordo como quantidade
 escolhida:
 
 ![Cube ADC configuring 2](media/cube_adc_configuring_2.png)
 
-É necessário abrir esses Ranks e colocar os canais lá, preferencialmente em
-ordem, e aumentar o Sampling Time para algo maior (não há um número definido):
+É necessário abrir esses "Ranks" e colocar os canais lá, preferencialmente em
+ordem, e aumentar o "Sampling Time" para algo maior (não há um número definido):
 
 ![Cube ADC configuring 3](media/cube_adc_configuring_3.png)
 
@@ -487,10 +496,11 @@ E adicionar o DMA na aba DMA, mudando o Mode para "Circular" e Data Width para
 
 Após essas configurações, podemos gerar o código.
 
-Adicione a função `MX_ADC1_Init()` a main ou em alguma outra função de
-inicialização, as funções relacionadas ao adc estão no `stm32f3xx_hal_adc.c`.
+Para podermos iniciar o ADC, basta adicionar a função `MX_ADC1_Init()` 
+na main ou em alguma outra função de inicialização, as funções relacionadas 
+ao adc estão no `stm32f3xx_hal_adc.c`.
 
-Com a utilização do DMA e a configuração de leitura contínua, é necessário criar
+Como estamos utilizando o DMA e a configuração de leitura contínua, é necessário criar
 um buffer para guardar essas leituras, então, em algum lugar do código, é
 necessário declarar um vetor com um tamanho múltiplo do número de canais (é
 necessário um número razoavelmente grande, para evitar que ele encha o buffer
