@@ -35,6 +35,7 @@
 - [PWM](#pwm)
   - [Geração de PPM](#geração-de-ppm)
   - [Leitura de PPM](#leitura-de-ppm)
+- [Encoders](#encoders)
 - [I²C](#ic)
 - [STM Studio](#stm-studio)
   - [Leitura de variáveis](#leitura-de-variáveis)
