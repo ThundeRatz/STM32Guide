@@ -1313,6 +1313,68 @@ borda de subida, estaremos fazendo 1964 - 65500 = -63536. Como a variável é
 unsigned de 16 bits, esse valor negativo será -63536 + 65536 = 2000, o valor
 esperado.
 
+# Encoders
+
+O Modo Encoder dos timers de hardware do STM32 oferece uma maneira eficiente de interagir com encoders de quadratura (A/B) diretamente usando os periféricos de timer. Este modo lida automaticamente com a contagem de pulsos e a detecção de direção em hardware, reduzindo significativamente a carga da CPU e melhorando a precisão em comparação com a contagem manual usando interrupções externas GPIO (EXTI), especialmente em velocidades mais altas.
+
+Antes de começar a configurar o encoder, é importante entender alguns pontos:
+
+1.  **Compatibilidade do Timer:** Nem todos os timers em um microcontrolador STM32 suportam o Modo Encoder. Verifique o datasheet do seu MCU específico e use o STM32CubeMX para confirmar quais timers (ex: TIM1, TIM2, TIM3, TIM4, TIM8 no STM32F303xC) oferecem essa funcionalidade.
+2.  **Requisitos de Canal:** O modo Encoder normalmente requer o uso do **Canal 1 (TI1)** e do **Canal 2 (TI2)** da *mesma* instância de timer.
+3.  **Resolução do Timer (16 bits vs. 32 bits):**
+    *   **Timers de 32 bits (Recomendado):** Oferecem uma faixa de contagem muito grande (0 a 4.294.967.295), minimizando o risco de overflow (estouro para cima) ou underflow (estouro para baixo) do contador durante intervalos de medição típicos. Use-os se estiverem disponíveis para encoders.
+    *   **Timers de 16 bits:** Possuem uma faixa limitada (0 a 65535). Se altas velocidades ou longos intervalos de medição fizerem o contador dar a volta (wrap around) frequentemente, você pode perder contagens ou obter leituras incorretas. Embora usáveis, podem exigir lógica de software adicional para lidar com overflows/underflows, lendo periodicamente o contador e acumulando o valor em uma variável mais larga (ex: 32 bits ou 64 bits).
+
+Para configurar o encoder, siga os passos abaixo:
+
+1.  **Habilitar Timer:** Na aba "Pinout & Configuration", navegue até "Timers" e selecione o timer **compatível** desejado (ex: `TIM5`).
+2.  **Selecionar Modo Encoder:**
+    *   Nas configurações de "Mode" do timer, encontre o dropdown "Combined Channels".
+    *   Selecione **`Encoder Mode`**. Isso configurará automaticamente os pinos TIMx_CH1 e TIMx_CH2. Certifique-se de que esses pinos estejam disponíveis e não entrem em conflito com outros periféricos.
+    ![Configuração do Modo Encoder no CubeMX](media/cube_encoder_mode_config.png)
+3.  **Configurar Parâmetros:** Vá para a aba "Configuration" -> "Parameter Settings" do timer. Configurações chave incluem:
+    *   **`Counter Mode`:** Geralmente deve ser `Up` (Crescente) por padrão.
+    *   **`Counter Period (AutoReload Register - ARR)`:** Defina este para o **valor máximo** para a resolução do timer (`0xFFFF` para 16 bits, `0xFFFFFFFF` para 32 bits). Isso permite que o timer conte livremente sem resetar baseado no próprio valor da contagem.
+    *   **`Encoder Mode`:** Selecione **`Encoder Mode TI1 and TI2`**. Isso configura o timer para contar nas bordas de *ambas* as entradas dos Canais 1 e 2, fornecendo a maior resolução (4 contagens por ciclo do encoder) e detectando a direção com base na relação de fase entre TI1 e TI2.
+    *   **`Input Filter (IC1 Filter, IC2 Filter)`:** Ajuda a filtrar sinais ruidosos do encoder. Um valor entre 0 (sem filtro) e 15 pode ser definido. Valores mais altos fornecem mais filtragem, mas introduzem latência. Ajuste com base na qualidade do sinal e requisitos de velocidade. Normalmente não é necessário alterar.
+    *   **`Polarity (IC1 Polarity, IC2 Polarity)`:** Geralmente `Rising Edge` (Borda de Subida). Determina qual borda do sinal dispara a contagem. Garanta que corresponda aos requisitos do seu encoder, se necessário. Os padrões costumam ser suficientes.
+    ![Configuração dos Parâmetros do Modo Encoder](media/cube_encoder_mode_settings.png)
+4.  **Configurar Pinos GPIO:**
+    *   Vá para a aba "GPIO Settings" do timer *ou* encontre os pinos TIMx_CH1 e TIMx_CH2 na visualização principal do Pinout ou na seção System Core -> GPIO.
+    *   É frequentemente recomendado habilitar o resistor de **`Pull-up`** interno para cada pino de entrada do encoder, especialmente se as saídas do encoder forem open-drain ou para garantir um estado definido quando desconectado.
+    ![Configuração de Pull-up no GPIO](media/cube_encoder_mode_gpio_settings.png)
+5.  **Gerar Código:** Gere o código do projeto.
+
+Para implementar o encoder no seu código, siga os passos abaixo:
+
+1.  **Inicialize o Timer:** Chame a função gerada pelo CubeMX.
+    ```c
+    MX_TIM5_Init(); // Chama a inicialização configurada no CubeMX
+    ```
+
+2.  **Inicie o Modo Encoder:** Após a inicialização, você precisa "ligar" o modo encoder para que o timer comece a contar os pulsos. Isso é feito **apenas uma vez**.
+
+    ```c
+    // Use o handle do timer configurado (ex: htim5 para TIM5)
+    // TIM_CHANNEL_ALL indica para usar os canais configurados (CH1 e CH2 no nosso caso)
+    HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_ALL);
+    ```
+
+3.  **Leia a Contagem:** Para ler o valor atual do encoder, basta acessar o registrador do contador do timer a qualquer momento. O valor representa a posição líquida (considerando incrementos e decrementos).
+
+    ```c
+    // Variável para armazenar a contagem
+    int32_t encoder_count;
+
+    // No seu loop principal ou onde precisar ler o valor:
+    encoder_count = (int32_t)__HAL_TIM_GET_COUNTER(&htim5);
+
+    // Agora a variável 'encoder_count' tem o valor atual do contador do encoder.
+    // Você pode usá-la para controle, cálculo de velocidade (em outra parte do código), etc.
+    // Exemplo simples: Imprimir o valor
+    // printf("Contagem Encoder: %ld\r\n", encoder_count);
+    ```
+
 # I²C
 
 O I²C é um protocolo de comunicação serial síncrono muito utilizado em sensores
