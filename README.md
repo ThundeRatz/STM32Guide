@@ -647,25 +647,27 @@ utilizado para leitura de sensores. Nela deve-se manipular os dados do buffer,
 por exemplo:
 
 ```c
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    uint32_t val[2] = { 0 };
+#define NUMBER_OF_SENSORS 2
+#define READINGS_PER_SENSOR 256
 
-    for (int i = 0; i < 2; i++) {
-        val[i] = 0;
+// [...]
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+    uint32_t readings[NUMBER_OF_SENSORS] = { 0 };
+
+    for (int i = 0; i < NUMBER_OF_SENSORS; i++) {
+        readings[i] = 0;
     }
 
-    for (int i = 0; i < 512 / 2; i++) {
-        for (int j = 0; j < 2; j++) {
-            val[j] += adc_buffer[2*i + j];
+    for (int i = 0; i < READINGS_PER_SENSOR; i++) {
+        for (int j = 0; j < NUMBER_OF_SENSORS; j++) {
+            readings[j] += adc_buffer[2*i + j];
         }
     }
 
-    for (int i = 0; i < 2; i++) {
-        val[i] /= 512 / 2;
-    }
-
-    for (int i = 0; i < 2; i++) {
-        line_sensor[i] = val[i];
+    for (int i = 0; i < NUMBER_OF_SENSORS; i++) {
+        readings[i] /= READINGS_PER_SENSOR;
+        line_sensor[i] = readings[i];
     }
 }
 ```
