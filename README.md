@@ -653,21 +653,23 @@ por exemplo:
 // [...]
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    uint32_t readings[NUMBER_OF_SENSORS] = {0};
+    if (hadc->Instance == hadc1.Instance) {
+        uint32_t readings[NUMBER_OF_SENSORS] = {0};
 
-    for (int i = 0; i < NUMBER_OF_SENSORS; i++) {
-        readings[i] = 0;
-    }
-
-    for (int i = 0; i < READINGS_PER_SENSOR; i++) {
-        for (int j = 0; j < NUMBER_OF_SENSORS; j++) {
-            readings[j] += adc_buffer[NUMBER_OF_SENSORS * i + j];
+        for (int i = 0; i < NUMBER_OF_SENSORS; i++) {
+            readings[i] = 0;
         }
-    }
 
-    for (int i = 0; i < NUMBER_OF_SENSORS; i++) {
-        readings[i] /= READINGS_PER_SENSOR;
-        line_sensor[i] = readings[i];
+        for (int i = 0; i < READINGS_PER_SENSOR; i++) {
+            for (int j = 0; j < NUMBER_OF_SENSORS; j++) {
+                readings[j] += adc_buffer[NUMBER_OF_SENSORS * i + j];
+            }
+        }
+
+        for (int i = 0; i < NUMBER_OF_SENSORS; i++) {
+            readings[i] /= READINGS_PER_SENSOR;
+            line_sensor[i] = readings[i];
+        }
     }
 }
 ```
