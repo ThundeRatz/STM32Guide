@@ -211,7 +211,7 @@ Exemplo de caminho:
 ```
 
 Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação 
-que você copiou. Para isso, consulte o [Apêndice 2](#criando-variaveis-no-path)
+que você copiou. Para isso, consulte o [Apêndice 2](#criando-variáveis-no-path)
 
 Para verificar se a variável foi criada, execute no terminal:
 
@@ -1629,8 +1629,8 @@ source ~/.config/fish/config.fish
 
 ## Criando variáveis no PATH
 
-Além de colocar caminhos para diretórios explicítos no PATH, é possível dar nomes a 
-eles, possibilitando fazer chamadas de diretórios usando somente o nome da 
+Além de colocar caminhos para diretórios no PATH, é possível dar nome a 
+eles, possibilitando fazer chamadas do diretório desejado usando somente o nome da 
 variável que você definiu para o caminho até esse diretório.
 
 >[!NOTE]
