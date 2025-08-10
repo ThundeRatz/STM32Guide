@@ -1625,6 +1625,8 @@ Para aplicar as alterações feche e abra o terminal ou digite:
 source ~/.config/fish/config.fish
 ```
 
+## Criando variáveis no PATH
+
 Além de colocar caminhos explicítos no PATH, é possível dar nomes para esses 
 diretórios, o que pode ser útil para, por exemplo, arquivos acessarem esse 
 caminho somente chamando pelo nome da variável que você definiu.
