@@ -1629,9 +1629,9 @@ source ~/.config/fish/config.fish
 
 ## Criando variáveis no PATH
 
-Além de colocar caminhos explicítos no PATH, é possível dar nomes para esses 
-diretórios, o que pode ser útil para, por exemplo, arquivos acessarem esse 
-caminho somente chamando pelo nome da variável que você definiu.
+Além de colocar caminhos para diretórios explicítos no PATH, é possível dar nomes a 
+eles, possibilitando fazer chamadas de diretórios usando somente o nome da 
+variável que você definiu para o caminho até esse diretório.
 
 >[!NOTE]
 >Para criar variáveis no PATH do WSL de programas que estão instalados no Windows, 
