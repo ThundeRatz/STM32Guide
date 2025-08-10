@@ -44,7 +44,7 @@
   - [Compilando e executando o projeto](#compilando-e-executando-o-projeto)
 - [Apêndices](#apêndices)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
-  - [Criando variáveis no PATH](#criando-variaveis-no-path)
+  - [Criando variáveis no PATH](#criando-variáveis-no-path)
   - [Virtualização da BIOS](#habilitando-a-virtualização-na-bios)
 ---
 
@@ -211,7 +211,7 @@ Exemplo de caminho:
 ```
 
 Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação 
-que você copiou. Para isso vejo o [Apêndice 2](#criando-variaveis-no-path)
+que você copiou. Para isso, consulte o [Apêndice 2](#criando-variaveis-no-path)
 
 Para verificar se a variável foi criada, execute no terminal:
 
