@@ -64,6 +64,7 @@ Para poder escrever programas para os microcontroladores da ST é necessário
 baixar alguns softwares e compiladores, bem como um editor de texto.
 
 Neste guia, apresentamos uma maneira de como instalar esses requisitos no Ubuntu.
+
 Para usuários de Windows recomendamos fortemente o dual boot para dar mais 
 facilidade e agilidade na hora execução de projetos ou então o uso do 
 Windows Subsystem for Linux.
@@ -105,10 +106,8 @@ e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
 4. Agora atualize os pacotes do sistema:
     
 ```bash
-$ sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 ```
-   
->[Referência](https://learn.microsoft.com/pt-br/windows/wsl/install#prerequisites)
 
 ## Visual Studio Code
 
@@ -207,14 +206,11 @@ uma variável no PATH.
 
 Exemplo de caminho:
 ```bash
- /home/eu/STM32CubeMX
+/home/eu/STM32CubeMX
 ```
 
-Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação
-do CubeMX nas configurações da shell que você utiliza. Na pasta deve conter o
-executável STM32CubeMX. O procedimento é similar a adicionar diretórios no PATH
-[(Apêndice 2)](#colocando-caminhos-no-path), mas com o nome da variável
-diferente e sem adicionar ao valor anterior da variável.
+Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação 
+que você copiou. Para isso vejo o [Apêndice 1](#colocando-caminhos-no-path)
 
 ## STM32 Cube Programmer
 
@@ -249,7 +245,7 @@ apêndice de como colocar caminhos no PATH
 Finalmente, para verificar a instalação, execute o seguinte comando: 
 
 ```bash
- STM32_Programmer_CLI -l
+STM32_Programmer_CLI -l
 ```
 
 Algo parecido deve aparecer:
@@ -263,9 +259,9 @@ STM32CubeProgrammer version: 2.2.1
 ```
 
 > [!NOTE]
-> Para verificar a instalação usando WSL, use 
+> Para verificar a instalação usando WSL, use:
 > ```bash
->  STM32_Programmer_CLI.exe -l
+> STM32_Programmer_CLI.exe -l
 > ```
 
 # STM32 Project Template
