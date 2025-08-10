@@ -213,6 +213,14 @@ Exemplo de caminho:
 Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação 
 que você copiou. Para isso vejo o [Apêndice 1](#colocando-caminhos-no-path)
 
+Para verificar se a variável foi criada, execute no terminal:
+
+```bash
+echo $CUBE_PATH
+```
+
+O caminho que você colocou na variável deve aparecer.
+
 ## STM32 Cube Programmer
 
 O STM32CubeProgrammer é uma ferramenta para programar microcontroladores
