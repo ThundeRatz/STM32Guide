@@ -107,8 +107,6 @@ e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
 ```bash
 $ sudo apt update && sudo apt upgrade -y
 ```
-
-Beleza, WSL instalado. 
    
 >[Referência](https://learn.microsoft.com/pt-br/windows/wsl/install#prerequisites)
 
