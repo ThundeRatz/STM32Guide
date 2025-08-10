@@ -211,7 +211,7 @@ Exemplo de caminho:
 ```
 
 Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação 
-que você copiou. Para isso vejo o [Apêndice 1](#colocando-caminhos-no-path)
+que você copiou. Para isso vejo o [Apêndice 2](#criando-variaveis-no-path)
 
 Para verificar se a variável foi criada, execute no terminal:
 
@@ -233,8 +233,8 @@ link](https://www.st.com/en/development-tools/stm32cubeprog.html).
 
 ### Instalação
 
-Faça o download da última versão do Cube Programmer de acordo com 
-o seu sistema. Note que há duas opções de instalação para Windows, selecione 
+Faça o download do Cube Programmer de acordo com o sistema que estiver 
+utilizando. Note que há duas opções de instalação para Windows, selecione 
 a opção "Win64" se seu computador for de 64 bits (provavelmente sim).
 
 Extraia os arquivos da pasta zip baixada e execute o instalador.
@@ -245,11 +245,13 @@ Cube Programmer no PATH.
 
 Exemplo de caminho:
 ```bash
-/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin
+/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer
 ```
 
-Após isso será necessário configurá-lo no PATH do sistema. Para isso vá até o 
-apêndice de como colocar caminhos no PATH
+Após isso, será necessário configurar o diretório onde está a pasta bin 
+do Cube Programmer no PATH do sistema. Para isso, adicione `/bin` no final 
+caminho que você copiou anteriormente. Consulte o 
+[Apêndice 1](#colocando-caminhos-no-path) para demais dúvidas.
 
 Finalmente, para verificar a instalação, execute o seguinte comando: 
 
