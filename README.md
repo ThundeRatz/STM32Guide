@@ -177,6 +177,7 @@ make --version
 arm-none-eabi-gcc --version
 ```
 Deve estar parecido com a imagem a seguir.
+
 ![{B5782A61-20D6-425B-9CAF-82E2A8BAEDB1}](https://github.com/user-attachments/assets/b101e354-601f-4249-a825-54713acf720e)
 
 ## STM32 Cube MX
