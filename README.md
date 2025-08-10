@@ -1544,7 +1544,7 @@ nenhuma alteração, siga o tutorial do bash.
 Para manter a variável PATH com o mesmo valor em futuras sessões do terminal,
 precisamos editar o arquivo de configuração da shell.
 
-0. Começando pelo bash:
+- Bash:
 
 ```bash
 code ~/.bashrc
@@ -1587,7 +1587,7 @@ Exemplo de configuração do PATH do CubeProgrammer:
 export PATH=$PATH:"/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin"
 ```
 
-1. Agora no fish:
+- Fish:
 
 ```bash
 nano ~/.config/fish/config.fish
@@ -1629,7 +1629,7 @@ caminho somente chamando pelo nome da variável que você definiu.
 
 O procedimento é parecido com colocar apenas caminhos no PATH.
 
-0. Bash:
+- Bash:
 
 Abra o .bashrc
 
@@ -1657,7 +1657,7 @@ Exemplo de declaração do CUBE_PATH:
 export CUBE_PATH="/home/eu/STM32CubeMX"
 ```
 
-1. Fish:
+- Fish:
 
 ```bash
 nano ~/.config/fish/config.fish
