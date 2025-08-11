@@ -10,7 +10,7 @@
   - [Windows Subsystem for Linux](#windows-subsystem-for-linux)
   - [Visual Studio Code](#visual-studio-code)
   - [Git](#git)
-  - [Compiladores](#compiladores)
+  - [Ferramentas](#ferramentas)
   - [STM32 Cube MX](#stm32-cube-mx)
   - [STM32 Cube Programmer](#stm32-cube-programmer)
 - [STM32 Project Template](#stm32-project-template)
@@ -63,7 +63,8 @@ microcontroladores.
 Para poder escrever programas para os microcontroladores da ST é necessário
 baixar alguns softwares e compiladores, bem como um editor de texto.
 
-Neste guia, apresentamos uma maneira de como instalar esses requisitos no Ubuntu.
+Neste guia, apresentamos uma maneira de como instalar esses requisitos em sistemas 
+baseados em Debian/Ubuntu.
 
 Para usuários de Windows recomendamos fortemente o dual boot para dar mais 
 facilidade e agilidade na hora execução de projetos ou então o uso do 
@@ -143,7 +144,8 @@ Para certificar que o git foi instalado corretamente, verifique a versão:
 git --version
 ```
 
-## Compiladores
+## Ferramentas
+
 ### Make, CMake e arm-none-eabi-gcc
 
 **Make** é usado para automatizar o processo de compilação e construção de 
@@ -161,21 +163,27 @@ embarcados com o STM32.
 >[!Warning] 
 >Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
 
-Abra o terminal do Ubuntu e insira o comando:
-```
+Abra o terminal e insira o seguinte comando:
+
+```bash
 sudo apt install -y cmake make gcc-arm-none-eabi
 ```
+
 Depois de concluido, você pode verificar a versão de cada compilador para 
 certificar que tudo ocorreu bem:
+
 ```bash
 cmake --version
 ```
+
 ```bash
 make --version
 ```
+
 ```bash
 arm-none-eabi-gcc --version
 ```
+
 Deve estar parecido com a imagem a seguir.
 
 ![{B5782A61-20D6-425B-9CAF-82E2A8BAEDB1}](https://github.com/user-attachments/assets/b101e354-601f-4249-a825-54713acf720e)
