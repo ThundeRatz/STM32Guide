@@ -146,15 +146,15 @@ git --version
 ## Compiladores
 ### Make, CMake e arm-none-eabi-gcc
 
-**arm-none-eabi-gcc** é usado para compilar programas para microcontroladores em
-ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos 
-embarcados com o STM32.
-
 **Make** é usado para automatizar o processo de compilação e construção de 
-projetos de software. 
+projetos de software.
 
 **CMake** é uma ferramenta de automação de construção, semelhante ao make, mas 
 com maior flexibilidade e modernidade.
+
+**arm-none-eabi-gcc** é usado para compilar programas para microcontroladores em
+ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos 
+embarcados com o STM32.
 
 ### Instalação
 
