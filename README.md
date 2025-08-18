@@ -1715,6 +1715,6 @@ Caso contrário, acesse este [guia](https://support.microsoft.com/pt-br/windows/
 >[!Warning] 
 >Será necessário fazer alterações na sua UEFI/BIOS. Caso não esteja acostumado com isso, peça ajuda aos veteranos.
     
-Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior. Se deu tudo certo, prossiga para a [instalação do WSL](#wsl).
+Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior. Se deu tudo certo, prossiga para a [instalação do WSL](#windows-subsystem-for-linux).
 
 >Voltar para o [índice](#Índice)    
