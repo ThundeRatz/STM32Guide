@@ -111,7 +111,7 @@ linha de comando para atualizar os pacotes do sistema.
 sudo apt update && sudo apt upgrade -y
 ```
 
-Pronto! você já tem um ambiente Linux instalado dentro do seu sistema Windows :)
+Pronto! Você já tem um ambiente Linux instalado dentro do seu sistema Windows :)
 
 A partir de agora, quando utilizarmos o termo "terminal" neste guia, vamos estar nos referindo 
 ao terminal do Ubuntu instalado.
@@ -133,10 +133,10 @@ alterações em arquivos, especialmente em projetos de desenvolvimento de
 software, permitindo que várias pessoas trabalhem simultaneamente sem perder 
 o histórico.
 
-### Instalação
-
 >[!Warning] 
->Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#windows-subsystem-for-linux).
+
+### Instalação
 
 Abra o terminal do Ubuntu e insira o comando:
 
@@ -164,10 +164,10 @@ com maior flexibilidade e modernidade.
 ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos 
 embarcados com o STM32.
 
-### Instalação
-
 >[!Warning] 
->Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#windows-subsystem-for-linux).
+
+### Instalação
 
 Abra o terminal e insira o seguinte comando:
 
