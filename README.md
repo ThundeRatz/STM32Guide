@@ -100,15 +100,18 @@ e aguarde a instalação:
 wsl --install -d ubuntu
 ```
     
-3. Agora com o Ubuntu (nossa distribuição de sistema Linux) instalado, feche o 
-Powershell e abra o Ubuntu pesquisando-o no menu Iniciar. Um terminal abrirá 
-e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
+3. Agora com o Ubuntu (nossa distribuição de sistema Linux) instalado, você verá 
+ainda no PowerShell mensagens pedindo nome de usuário e senha para configurar 
+seu ambiente Linux. Preencha de acordo para continuar.
 
-4. Agora atualize os pacotes do sistema:
-    
+4. Abra o Ubuntu pesquisando-o no menu Iniciar. Quando aberto insira a seguinte linha
+para atualizar os pacotes do sistema.
+
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
+
+Pronto! você já tem um ambiente Linux instalado dentro do seu sistema Windows :)
 
 ## Visual Studio Code
 
