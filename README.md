@@ -112,6 +112,8 @@ sudo apt update && sudo apt upgrade -y
 ```
 
 Pronto! você já tem um ambiente Linux instalado dentro do seu sistema Windows :)
+A partir de agora, quando utilizarmos o termo "terminal" neste guia, vamos estar nos referindo 
+ao terminal do Ubuntu instalado.
 
 ## Visual Studio Code
 
