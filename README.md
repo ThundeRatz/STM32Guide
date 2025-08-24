@@ -66,8 +66,8 @@ baixar alguns softwares e compiladores, bem como um editor de texto.
 Neste guia, apresentamos uma maneira de como instalar esses requisitos em sistemas 
 baseados em Debian/Ubuntu.
 
-Para usuários de Windows recomendamos fortemente o dual boot para dar mais 
-facilidade e agilidade na hora execução de projetos ou então o uso do 
+Para usuários de Windows recomendamos fortemente o dual-boot para dar mais 
+facilidade e agilidade na hora da execução de projetos ou então o uso do 
 Windows Subsystem for Linux.
 
 ## Windows Subsystem for Linux
@@ -102,16 +102,17 @@ wsl --install -d ubuntu
     
 3. Agora com o Ubuntu (nossa distribuição de sistema Linux) instalado, você verá 
 ainda no PowerShell mensagens pedindo nome de usuário e senha para configurar 
-seu ambiente Linux. Preencha de acordo para continuar.
+seu ambiente Linux. Preencha de acordo para continuarmos.
 
-4. Abra o Ubuntu pesquisando-o no menu Iniciar. Quando aberto insira a seguinte linha
-para atualizar os pacotes do sistema.
+4. Abra o Ubuntu pesquisando-o no menu Iniciar. Quando aberto, insira a seguinte 
+linha de comando para atualizar os pacotes do sistema.
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
 
 Pronto! você já tem um ambiente Linux instalado dentro do seu sistema Windows :)
+
 A partir de agora, quando utilizarmos o termo "terminal" neste guia, vamos estar nos referindo 
 ao terminal do Ubuntu instalado.
 
@@ -1569,76 +1570,76 @@ precisamos editar o arquivo de configuração da shell.
 
 - **Bash**:
 
-```bash
-code ~/.bashrc
-```
+  ```bash
+  code ~/.bashrc
+  ```
 
-Adicione a seguinte linha no final do arquivo:
+  Adicione a seguinte linha no final do arquivo:
 
-```bash
-export PATH=$PATH:"/caminho/do/diretorio"
-```
+  ```bash
+  export PATH=$PATH:"/caminho/do/diretorio"
+  ```
 
-Salve as alterações.
+  Salve as alterações.
 
-É possível adicionar vários diretórios com um comando. Os diretórios na variável
-PATH são separados por “:”.
+  É possível adicionar vários diretórios com um comando. Os diretórios na variável
+  PATH são separados por “:”.
 
-```bash
-export PATH=$PATH:"/caminho/do/diretorio/um:/caminho/do/diretorio/dois"
-```
+  ```bash
+  export PATH=$PATH:"/caminho/do/diretorio/um:/caminho/do/diretorio/dois"
+  ```
 
-Nos comandos acima, estamos adicionando os diretórios no fim da variável, então, eles 
-terão menor prioridade sobre outros diretórios se possuírem um executável com o mesmo 
-nome. Para adicionar no início, o comando seria:
+  Nos comandos acima, estamos adicionando os diretórios no fim da variável, então, eles 
+  terão menor prioridade sobre outros diretórios se possuírem um executável com o mesmo 
+  nome. Para adicionar no início, o comando seria:
 
-```bash
-export PATH="/diretorio/um:/diretorio/dois:$PATH"
-```
+  ```bash
+  export PATH="/diretorio/um:/diretorio/dois:$PATH"
+  ```
 
-Mas recomenda-se adicionar no fim.
+  Mas recomenda-se adicionar no fim.
 
-Para aplicar as alterações feche e abra o terminal ou digite:
+  Para aplicar as alterações feche e abra o terminal ou digite:
 
-```bash
-source ~/.bashrc
-```
+  ```bash
+  source ~/.bashrc
+  ```
 
-Exemplo de configuração do PATH do CubeProgrammer:
+  Exemplo de configuração do **PATH do CubeProgrammer**:
 
-```bash
-export PATH=$PATH:"/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin"
-```
+  ```bash
+  export PATH=$PATH:"/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin"
+  ```
 
 - **Fish**:
 
-```bash
-nano ~/.config/fish/config.fish
-```
+  ```bash
+  nano ~/.config/fish/config.fish
+  ```
 
-Adicione a seguinte linha:
+  Adicione a seguinte linha:
 
-```bash
-set -gx PATH $PATH /diretorio/um /diretorio/dois
-```
+  ```bash
+  set -gx PATH $PATH /diretorio/um /diretorio/dois
+  ```
 
-No comando acima, estamos adicionando os diretórios no fim da variável, então,
-eles terão menor prioridade sobre outros diretórios se possuírem um executável
-com o mesmo nome. Para adicionar no início, o comando seria:
+  No comando acima, estamos adicionando os diretórios no fim da variável, então,
+  eles terão menor prioridade sobre outros diretórios se possuírem um executável
+  com o mesmo nome. Para adicionar no início, o comando seria:
 
-```bash
-set -gx PATH /diretorio/um /diretorio/dois $PATH
-```
+  ```bash
+  set -gx PATH /diretorio/um /diretorio/dois $PATH
+  ```
 
-Mas recomenda-se adicionar no fim.
+  Mas recomenda-se adicionar no fim.
 
-Salve o arquivo (Ctrl + X e depois Y).
+  Salve o arquivo (Ctrl + X e depois Y).
 
-Para aplicar as alterações feche e abra o terminal ou digite:
+  Para aplicar as alterações feche e abra o terminal ou digite:
 
-```bash
-source ~/.config/fish/config.fish
-```
+  ```bash
+  source ~/.config/fish/config.fish
+  ```
 
 ## Criando variáveis no PATH
 
@@ -1656,57 +1657,57 @@ O procedimento é parecido com colocar apenas caminhos no PATH.
 
 - **Bash**:
 
-Abra o .bashrc
+  Abra o .bashrc
 
-```bash
-code ~/.bashrc
-```
+  ```bash
+  code ~/.bashrc
+  ```
 
-Adicione a seguinte linha no final:
+  Adicione a seguinte linha no final:
 
-```bash
-export NOME_DA_VARIAVEL="/caminho/do/diretorio"
-```
+  ```bash
+  export NOME_DA_VARIAVEL="/caminho/do/diretorio"
+  ```
 
-Salve o arquivo.
+  Salve o arquivo.
 
-Para aplicar as alterações feche e abra o terminal ou digite:
+  Para aplicar as alterações feche e abra o terminal ou digite:
 
-```bash
-source ~/.bashrc
-```
+  ```bash
+  source ~/.bashrc
+  ```
 
-Exemplo de declaração do CUBE_PATH:
+  Exemplo de declaração do **CUBE_PATH**:
 
-```bash
-export CUBE_PATH="/home/eu/STM32CubeMX"
-```
+  ```bash
+  export CUBE_PATH="/home/eu/STM32CubeMX"
+  ```
 
 - **Fish**:
 
-```bash
-nano ~/.config/fish/config.fish
-```
+  ```bash
+  nano ~/.config/fish/config.fish
+  ```
 
-Crie a variável:
+  Crie a variável:
 
-```bash
-set -gx NOME_DA_VARIAVEL "caminho/do/diretorio"
-```
+  ```bash
+  set -gx NOME_DA_VARIAVEL "caminho/do/diretorio"
+  ```
 
-Coloque no PATH:
+  Coloque no PATH:
 
-```bash
-set -gx PATH $PATH $NOME_DA_VARIAVEL
-```
+  ```bash
+  set -gx PATH $PATH $NOME_DA_VARIAVEL
+  ```
 
-Salve o arquivo (Ctrl + X e depois Y).
+  Salve o arquivo (Ctrl + X e depois Y).
 
-Para aplicar as alterações feche e abra o terminal ou digite:
+  Para aplicar as alterações feche e abra o terminal ou digite:
 
-```bash
-source ~/.config/fish/config.fish
-```
+  ```bash
+  source ~/.config/fish/config.fish
+  ```
 
 ## Habilitando a virtualização na BIOS   
 Para que seja possível a instalação do WSL, primeiro é necessário que a virtualização da BIOS/UEFI esteja habilitada. A virtualização permite que o seu dispositivo Windows emule um sistema operativo diferente, como Android ou Linux. 
@@ -1714,7 +1715,7 @@ Para saber este status na sua máquina, abra o gerenciador de tarefas, vá para 
 
 ![virtualização ON](https://github.com/user-attachments/assets/4109eded-9a59-48f6-bf46-1b09f19a6374)
 
-Se já está habilitado, prossiga para o passo 1 da [instalação do WSL](#wsl). 
+Se já está habilitado, prossiga para o passo 1 da [instalação do WSL](#windows-subsystem-for-linux). 
 Caso contrário, acesse este [guia](https://support.microsoft.com/pt-br/windows/ativar-a-virtualiza%C3%A7%C3%A3o-no-windows-c5578302-6e43-4b4b-a449-8ced115f58e1) da Microsoft pelo seu celular e siga o passo a passo no seu computador.
 
 >[!Warning] 
