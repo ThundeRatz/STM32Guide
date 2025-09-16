@@ -7,15 +7,11 @@
 - [Índice](#Índice)
 - [Introdução](#introdução)
 - [Requisitos](#requisitos)
-  - [STM32 Cube MX](#stm32-cube-mx)
-    - [Instalação no Windows](#instalação-no-windows)
-    - [Instalação no Linux](#instalação-no-linux)
-  - [WSL](#wsl)
-  - [Compiladores](#compiladores)
-    - [Instalação WSL e Linux](#instalação-wsl-e-linux)
-  - [Git](#git)
-    - [Instalação WSL e Linux](#instalação-wsl-e-linux-1)
+  - [Windows Subsystem for Linux](#windows-subsystem-for-linux)
   - [Visual Studio Code](#visual-studio-code)
+  - [Git](#git)
+  - [Ferramentas](#ferramentas)
+  - [STM32 Cube MX](#stm32-cube-mx)
   - [STM32 Cube Programmer](#stm32-cube-programmer)
 - [STM32 Project Template](#stm32-project-template)
 - [Cube MX](#cube-mx)
@@ -48,10 +44,7 @@
   - [Compilando e executando o projeto](#compilando-e-executando-o-projeto)
 - [Apêndices](#apêndices)
   - [Colocando caminhos no PATH](#colocando-caminhos-no-path)
-    - [O que é PATH](#o-que-é-path)
-    - [Windows](#windows)
-    - [Linux](#linux)
-  - [Instalando MSYS2 no Windows](#instalando-msys2-no-windows)
+  - [Criando variáveis no PATH](#criando-variáveis-no-path)
   - [Virtualização da BIOS](#habilitando-a-virtualização-na-bios)
 ---
 
@@ -68,130 +61,22 @@ microcontroladores.
 # Requisitos
 
 Para poder escrever programas para os microcontroladores da ST é necessário
-baixar alguns softwares e bibliotecas específicas, bem como um editor de texto.
+baixar alguns softwares e compiladores, bem como um editor de texto.
 
-## STM32 Cube MX
+Neste guia, apresentamos uma maneira de como instalar esses requisitos em sistemas 
+baseados em Debian/Ubuntu.
 
-Esse software é bem importante quando se está no começo do desenvolvimento e é
-utilizado desde o projeto de placa. Nele, é possível setar várias configurações
-de pinos e periféricos por meio de uma interface gráfica e gerar o código disso
-automaticamente, o que seria muito difícil de fazer na mão.
+Para usuários de Windows recomendamos fortemente o dual-boot para dar mais 
+facilidade e agilidade na hora da execução de projetos ou então o uso do 
+Windows Subsystem for Linux.
 
-Para baixá-lo, acesse [este
-link](http://www.st.com/en/development-tools/stm32cubemx.html).
+## Windows Subsystem for Linux
+Windows Subsystem for Linux (WSL) é uma funcionalidade do Windows que permite a 
+execução de aplicativos e comandos Linux dentro do sistema Windows.
 
-Instruções gerais de uso se encontram logo na próxima seção. Instruções
-específicas estarão em suas respectivas seções.
-
-### Instalação no Windows
-
-Clique em "Get Software" e baixe a última versão disponível em "Get Latest".
-
-Antes de poder baixar o software é necessário estar logado em uma conta da ST. Caso não tenha, crie uma antes de continuar.
-
-Extraia o .zip e execute o arquivo SetupSTM32CubeMX-X.X.X.exe (X.X.X é a versão).
-
-Seguindo as instruções da tela, copie o caminho em que o CubeMX será instalado, isso vai ser importante para configurar o `CUBE_PATH` no WSL.
-
-![Cube installation path](media/cube_installation_path.png)
-
-Para poder usar o CubeMX no WSL, precisamos configurar o `CUBE_PATH` dentro dele. Para isso, execute o seguinte comando no terminal do Ubuntu:
-
-```bash
- code ~/.bashrc
-```
-
-No arquivo que abrir, coloque a seguinte linha no final do arquivo:
-
-```bash
- export CUBE_PATH="/mnt/c/'caminho que voce copiou na instalação do cubemx"
-```
-
-Complete o comando com o caminho que você copiou anteriormente, lembrando de retirar `C:\` do caminho copiado e colocar todo o comando com barras inclinadas para a direita `/`.
-
-![Cube path](media/cube_path.png)
-
-Em seguida, volte no terminal do Ubuntu e dê o seguinte comando 
-
-```bash
- source ~/.bashrc
-```
-
-Para verificar se o `CUBE_PATH` foi configurado, execute o seguinte comando:
-
-```bash
- echo $CUBE_PATH
-```
-
-Se tudo deu certo, o caminho do `CUBE_PATH` vai ser mostrado. No nosso exemplo retornaria:
-
-`/mnt/c/Program Files/STMicroelectronics/STM32Cube/STM32CubeMX`
-
-### Instalação no Linux
-
-É necessário instalar Java. Para isso, execute os seguintes comandos:
-
-```bash
-$ sudo add-apt-repository ppa:linuxuprising/java
-$ sudo apt update
-$ sudo apt install oracle-java10-installer
-```
-
-Agora, execute o arquivo SetupSTM32CubeMX-X.X.X.linux. Substitua X.X.X pela
-versão baixada.
-
-```bash
-$ sudo ./SetupSTM32CubeMX-X.X.X.linux
-```
-
-Siga as instruções na tela.
-
-É possível que ocorra alguns erros porque o Cube depende de bibliotecas de
-sistemas de 32 bits. Instale a biblioteca libc6-i386 para resolver o problema:
-
-```bash
-$ sudo apt install libc6-i386
-```
-
-Tente executar o arquivo novamente.
-
-Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação
-do Cube nas configurações da shell que você utiliza. Na pasta deve conter o
-executável STM32CubeMX. O procedimento é similar a adicionar diretórios no PATH
-[(Apêndice 2)](#colocando-caminhos-no-path), mas com o nome da variável
-diferente e sem adicionar ao valor anterior da variável.
-
-O local de instalação padrão é
-`/usr/local/STMicroelectronics/STM32Cube/STM32CubeMX`.
-
-Muito bem! O Cube foi instalado com sucesso. Porém, ao olhar no menu de
-programas, pode-se perceber que ele não aparece em lugar nenhum. Para isso, é
-necessário criar uma entrada para ele dentro do menu. Faça isso com:
-
-```bash
-$ cd /usr/share/applications
-$ sudo gedit stm32cubemx.desktop
-```
-
-Dentro do arquivo em branco criado, digite:
-
-```conf
-[Desktop Entry]
-Name=STM32 Cube MX
-GenericName=STM32 Cube MX
-Comment=STM32 Cube initialization code generator
-Exec=/seu/local/de/instalacao/STM32CubeMX
-Icon=/seu/local/de/instalacao/help/STM32CubeMX.ico
-Terminal=false
-Type=Application
-Categories=Development;Electronics;
-```
-
-## WSL
-WSL (Windows Subsystem for Linux) é uma funcionalidade do Windows que permite a execução de aplicativos e comandos do Linux Ubuntu diretamente no terminal do Windows. Então se você está no Windows, vai precisar.
-
-### Instalação (somente Windows)
-0. Primeiro, verifique se a virtualização da sua máquina está habilitada. Clique [aqui](#Habilitando-a-virtualização-na-BIOS) para ver o passo a passo.
+### Instalação
+0. Primeiro, verifique se a virtualização da sua máquina está habilitada. 
+Clique [aqui](#Habilitando-a-virtualização-na-BIOS) para ver o passo a passo.
 
 1. Com o passo anterior concluido, vamos ativar o WSL. Vá em:
 
@@ -208,64 +93,50 @@ Habilite estas 3 opções:
 
 Reinicie seu computador.
 
-2. Depois de reiniciado, abra o PowerShell como Administrador, insira o comando e aguarde a instalação:
+2. Depois de reiniciado, abra o PowerShell como Administrador, insira o comando 
+e aguarde a instalação:
     
 ```powershell
-wsl --install -d Ubuntu
+wsl --install -d ubuntu
 ```
     
-3. Agora com o Ubuntu (nossa distribuição de sistema Linux) instalado, feche o Powershell e abra o Ubuntu pesquisando-o no menu Iniciar. Um terminal abrirá e pedirá para você criar um nome de usuário e senha para o ambiente Linux.
+3. Agora com o Ubuntu (nossa distribuição de sistema Linux) instalado, você verá 
+ainda no PowerShell mensagens pedindo nome de usuário e senha para configurar 
+seu ambiente Linux. Preencha de acordo para continuarmos.
 
-4. Agora atualize os pacotes do sistema:
-    
+4. Abra o Ubuntu pesquisando-o no menu Iniciar. Quando aberto, insira a seguinte 
+linha de comando para atualizar os pacotes do sistema.
+
 ```bash
-$ sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 ```
 
-Beleza, WSL instalado. 
-   
->[Referência](https://learn.microsoft.com/pt-br/windows/wsl/install#prerequisites)
+Pronto! Você já tem um ambiente Linux instalado dentro do seu sistema Windows :)
 
+A partir de agora, quando utilizarmos o termo "terminal" neste guia, vamos estar nos referindo 
+ao terminal do Ubuntu instalado.
 
-## Compiladores
-### Make, CMake e arm-none-eabi-gcc 
-**arm-none-eabi-gcc** é usado para compilar programas para microcontroladores em ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos embarcados com o STM32.
+## Visual Studio Code
 
-**Make** é usado para automatizar o processo de compilação e construção de projetos de software. 
+>[!NOTE]
+>Se estiver usando WSL, faça a instalação no Windows
 
-**CMake** é uma ferramenta de automação de construção, semelhante ao make, mas com maior flexibilidade e modernidade.
+Para baixar, acesse [esse link](https://code.visualstudio.com/) e escolha o 
+instalador para seu sistema operacional. 
 
-### Instalação WSL e Linux
-
->[!Warning] 
->Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
-
-Abra o terminal do Ubuntu e insira o comando:
-```
-sudo apt install -y cmake make gcc-arm-none-eabi
-```
-Depois de concluido, você pode verificar a versão de cada compilador para certificar que tudo ocorreu bem:
-```bash
-cmake --version
-```
-```bash
-make --version
-```
-```bash
-arm-none-eabi-gcc --version
-```
-Deve estar parecido com a imagem a seguir.
-![{B5782A61-20D6-425B-9CAF-82E2A8BAEDB1}](https://github.com/user-attachments/assets/b101e354-601f-4249-a825-54713acf720e)
-
+Faça a instalação padrão.
 
 ## Git
 
-Git é um sistema de controle de versão distribuído. Ele serve para rastrear alterações em arquivos, especialmente em projetos de desenvolvimento de software, permitindo que várias pessoas trabalhem simultaneamente sem perder histórico.
-
-### Instalação WSL e Linux
+Git é um sistema de controle de versão distribuído. Ele serve para rastrear 
+alterações em arquivos, especialmente em projetos de desenvolvimento de 
+software, permitindo que várias pessoas trabalhem simultaneamente sem perder 
+o histórico.
 
 >[!Warning] 
->Se você está no Windows e ainda não instalou o WSL, clique [aqui](#wsl).
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#windows-subsystem-for-linux).
+
+### Instalação
 
 Abra o terminal do Ubuntu e insira o comando:
 
@@ -279,58 +150,127 @@ Para certificar que o git foi instalado corretamente, verifique a versão:
 git --version
 ```
 
-## Visual Studio Code
+## Ferramentas
 
-Para baixar, acesse [esse link](https://code.visualstudio.com/).
+### Make, CMake e arm-none-eabi-gcc
 
+**Make** é usado para automatizar o processo de compilação e construção de 
+projetos de software.
+
+**CMake** é uma ferramenta de automação de construção, semelhante ao make, mas 
+com maior flexibilidade e modernidade.
+
+**arm-none-eabi-gcc** é usado para compilar programas para microcontroladores em
+ambientes de baixo nível, como no desenvolvimento de firmware para dispositivos 
+embarcados com o STM32.
+
+>[!Warning] 
+>Se você está no Windows e ainda não instalou o WSL, clique [aqui](#windows-subsystem-for-linux).
+
+### Instalação
+
+Abra o terminal e insira o seguinte comando:
+
+```bash
+sudo apt install -y cmake make gcc-arm-none-eabi
+```
+
+Depois de concluido, você pode verificar a versão de cada compilador para 
+certificar que tudo ocorreu bem:
+
+```bash
+cmake --version
+```
+
+```bash
+make --version
+```
+
+```bash
+arm-none-eabi-gcc --version
+```
+
+Deve estar parecido com a imagem a seguir.
+
+![{B5782A61-20D6-425B-9CAF-82E2A8BAEDB1}](https://github.com/user-attachments/assets/b101e354-601f-4249-a825-54713acf720e)
+
+## STM32 Cube MX
+
+Esse software é bem importante quando se está no começo do desenvolvimento e é
+utilizado desde o projeto de placa. Nele é possível setar várias configurações
+de pinos e periféricos por meio de uma interface gráfica e gerar o código disso
+automaticamente.
+
+Para baixá-lo, acesse [este
+link](http://www.st.com/en/development-tools/stm32cubemx.html).
+
+> [!NOTE]
+> Se estiver usando WSL, faça a instalação no Windows
+
+### Instalação
+
+Faça o download de acordo com o sistema operacional que estiver usando.
+
+Extraia os arquivos da pasta .zip e execute o arquivo 
+SetupSTM32CubeMX-X.X.X.linux ou SetupSTM32CubeMX-X.X.X.exe se estiver 
+usando Windows.
+
+Durante a instalação, o instalador irá pedir um diretório onde o programa 
+irá ser instalado. Deixe como padrão e copie o caminho para podermos criar 
+uma variável no PATH.
+
+Exemplo de caminho:
+```bash
+/home/eu/STM32CubeMX
+```
+
+Após a instalação, crie uma variável chamada CUBE_PATH com o local de instalação 
+que você copiou. Para isso, consulte o [Apêndice 2](#criando-variáveis-no-path)
+
+Para verificar se a variável foi criada, execute no terminal:
+
+```bash
+echo $CUBE_PATH
+```
+
+O caminho que você colocou na variável deve aparecer.
 
 ## STM32 Cube Programmer
 
-O STM32CubeProgrammer é uma ferramenta para programar os microcontroladores
-STM32. É possível ver e apagar o conteúdo da memória flash, além de escrever os
+O STM32CubeProgrammer é uma ferramenta para programar microcontroladores
+STM32. É possível ver e apagar o conteúdo da memória flash, além de escrever 
 arquivos binários. Para baixar, acesse [esse
 link](https://www.st.com/en/development-tools/stm32cubeprog.html).
 
-### Instalação no Windows
+> [!NOTE]
+> Se estiver usando WSL, faça a instalação no Windows
 
-Clique em "Get Software" e baixe a ultima versão do Cube Programmer. Note que há duas opções de instalação para Windows, selecione a opção "Win64".
+### Instalação
 
-Extraia o executável da pasta zip baixada e execute-o.
+Faça o download do Cube Programmer de acordo com o sistema que estiver 
+utilizando. Note que há duas opções de instalação para Windows, selecione 
+a opção "Win64" se seu computador for de 64 bits (provavelmente sim).
 
-Em uma das etapas da instalação, vai ser configurado o caminho que o Cube Programmer será instalado. Copie esse caminho, que mais tarde vai ser necessário para configurá-lo no Ubuntu.
+Extraia os arquivos da pasta zip baixada e execute o instalador.
 
-![Cube programmer installation path](media/cube_programmer_installation_path.png)
+Durante a instalação, o instalador irá pedir um diretório onde o programa 
+irá ser instalado. Deixe como padrão e copie o caminho para configurar o 
+Cube Programmer no PATH.
 
-Selecionando as opções padrão de instalação, aceitando os termos e instalando os drivers necessários para o Cube Programmer funcionar, podemos configurá-lo no Ubuntu.
-
-Para isso, no terminal do Ubuntu, digite o seguinte comando:
-
+Exemplo de caminho:
 ```bash
- code ~/.bashrc 
-```
- 
-No arquivo que abrir, coloque a seguinte linha no final desse arquivo:
-
-```bash
- export PATH=$PATH:"/mnt/c/'caminho que voce copiou na instalação do cubeprogrammer'
+/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer
 ```
 
-Complete o comando com o caminho que você copiou na etapa anterior, retirando o `C:/` e colocando no final do caminho `/bin`. É importante verificar também se o caminho está com todas as barras que dividem as pastas inclinadas para a direita `/`.
+Após isso, será necessário configurar o diretório onde está a pasta bin 
+do Cube Programmer no PATH do sistema. Para isso, adicione `/bin` no final 
+caminho que você copiou anteriormente. Consulte o 
+[Apêndice 1](#colocando-caminhos-no-path) para demais dúvidas.
 
-Abaixo temos um exemplo de como ficaria:
-
-![Cube programmer path](media/cube_programmer_path.png)
-
-Após isso, no terminal do Ubuntu digite 
-
-```bash
- source ~/.bashrc
-``` 
-
-E para verificar se o CubeProgrammer foi configurado, execute o seguinte comando: 
+Finalmente, para verificar a instalação, execute o seguinte comando: 
 
 ```bash
- STM32_Programmer_CLI.exe -l
+STM32_Programmer_CLI -l
 ```
 
 Algo parecido deve aparecer:
@@ -343,12 +283,11 @@ Algo parecido deve aparecer:
 STM32CubeProgrammer version: 2.2.1
 ```
 
-### Instalação no Linux
-
-Para baixar, acesse [esse link](https://www.st.com/en/development-tools/stm32cubeprog.html).
-
-Após baixar e instalar, adicione o caminho do executável à variável PATH
-[(Apêndice 2)](#colocando-caminhos-no-path).
+> [!NOTE]
+> Para verificar a instalação usando WSL, use:
+> ```bash
+> STM32_Programmer_CLI.exe -l
+> ```
 
 # STM32 Project Template
 
@@ -1608,147 +1547,180 @@ Depois disso podemos usar o Make, que tem vários comandos, listados [aqui](http
 
 ## Colocando caminhos no PATH
 
-### O que é PATH
-
 PATH é uma variável protegida do sistema (Windows, Linux e Mac) e contém uma
-lista de pastas. Quando um comando é executado, o sistema procura os arquivos
-necessários nas pastas listadas no PATH do usuário e do sistema.
+lista de diretórios. Quando um comando é executado, o sistema procura os arquivos
+necessários nos diretórios listadas no PATH do usuário e do sistema.
 
-### Linux
+>[!NOTE] 
+>Para configurar o PATH no WSL de programas que estão instalados no Windows, 
+>é necessário acrescentar `/mnt/c/` no começo do caminho do diretório para 
+>identificar que o arquivo está instalado no Windows e não no ambiente Linux 
+>do WSL.
 
-Este tutorial também serve para configurar o PATH se você está utilizando o Linux pelo WSL com o adendo de que para o caminho das pastas, você deve adicionar `/mnt/c/` no começo para identificar que o arquivo está instalado no Windows e não no ambiente Linux do WSL.
+Para alterar o PATH, o modo pode ser diferente dependendo da shell
+utilizada no terminal. Aqui, mostraremos como é feito utilizando bash 
+e fish. O procedimento é similar em outras shells.
 
-Para alterar o PATH no Linux, o modo pode ser diferente dependendo da shell
-utilizada. Aqui, mostraremos como é feito utilizando bash e fish. O procedimento
-é similar em outras shells.
+> [!NOTE]
+> Por padrão, no Ubuntu, a shell configurada é o bash, então se você não fez 
+nenhuma alteração, siga o tutorial do bash.
 
 Para manter a variável PATH com o mesmo valor em futuras sessões do terminal,
 precisamos editar o arquivo de configuração da shell.
 
-Começando pelo bash:
+- **Bash**:
 
-```bash
-$ nano ~/.bashrc
-```
+  ```bash
+  code ~/.bashrc
+  ```
 
-Adicione a seguinte linha:
+  Adicione a seguinte linha no final do arquivo:
 
-```bash
-export PATH=$PATH:/diretorio/um:/diretorio/dois
-```
+  ```bash
+  export PATH=$PATH:"/caminho/do/diretorio"
+  ```
 
-É possível adicionar vários diretórios com um comando. Os diretórios na variável
-PATH são separados por “:”. No comando acima, estamos adicionando os diretórios
-no fim da variável, então, eles terão menor prioridade sobre outros diretórios
-se possuírem um executável com o mesmo nome. Para adicionar no início, o comando
-seria:
+  Salve as alterações.
 
-```bash
-export PATH=/diretorio/um:/diretorio/dois:$PATH
-```
+  É possível adicionar vários diretórios com um comando. Os diretórios na variável
+  PATH são separados por “:”.
 
-Mas recomenda-se adicionar no fim.
+  ```bash
+  export PATH=$PATH:"/caminho/do/diretorio/um:/caminho/do/diretorio/dois"
+  ```
 
-Salve o arquivo (Ctrl + X e depois Y).
+  Nos comandos acima, estamos adicionando os diretórios no fim da variável, então, eles 
+  terão menor prioridade sobre outros diretórios se possuírem um executável com o mesmo 
+  nome. Para adicionar no início, o comando seria:
 
-Para aplicar as alterações feche e abra o terminal ou digite:
+  ```bash
+  export PATH="/diretorio/um:/diretorio/dois:$PATH"
+  ```
 
-```bash
-$ source ~/.bashrc
-```
+  Mas recomenda-se adicionar no fim.
 
-Agora no fish:
+  Para aplicar as alterações feche e abra o terminal ou digite:
 
-```bash
-$ nano ~/.config/fish/config.fish
-```
+  ```bash
+  source ~/.bashrc
+  ```
 
-Adicione a seguinte linha:
+  Exemplo de configuração do **PATH do CubeProgrammer**:
 
-```bash
-set -gx PATH $PATH /diretorio/um /diretorio/dois
-```
+  ```bash
+  export PATH=$PATH:"/home/eu/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin"
+  ```
 
-No comando acima, estamos adicionando os diretórios no fim da variável, então,
-eles terão menor prioridade sobre outros diretórios se possuírem um executável
-com o mesmo nome. Para adicionar no início, o comando seria:
+- **Fish**:
 
-```bash
-set -gx PATH /diretorio/um /diretorio/dois $PATH
-```
+  ```bash
+  nano ~/.config/fish/config.fish
+  ```
 
-Mas recomenda-se adicionar no fim.
+  Adicione a seguinte linha:
 
-Salve o arquivo (Ctrl + X e depois Y).
+  ```bash
+  set -gx PATH $PATH /diretorio/um /diretorio/dois
+  ```
 
-Para aplicar as alterações feche e abra o terminal ou digite:
+  No comando acima, estamos adicionando os diretórios no fim da variável, então,
+  eles terão menor prioridade sobre outros diretórios se possuírem um executável
+  com o mesmo nome. Para adicionar no início, o comando seria:
 
-```bash
-$ source ~/.config/fish/config.fish
-```
+  ```bash
+  set -gx PATH /diretorio/um /diretorio/dois $PATH
+  ```
 
-## Instalando MSYS2 no Windows
+  Mas recomenda-se adicionar no fim.
 
-Para instalar ferramentas de desenvolvimento no Windows, como make, gcc e git,
-recomendamos instalar o MSYS2. Entre no site do [MSYS2](https://www.msys2.org/),
-clique para baixar a versão apropriada para a arquitetura do seu computador
-(msys2-i686-<versao>.exe no caso de 32 bits e msys2-x86_64-<versao>.exe no caso
-de 64 bits, a maioria dos computadores atuais são de 64 bits), desça a página e
-siga as instruções de instalação. Na etapa 5, quando utilizar o comando pacman
--Syu no terminal do MSYS2, haverá um momento que você deverá fechar a janela
-(uma mensagem aparece no terminal). Feche-a e abra novamente, executando a etapa
-6.
+  Salve o arquivo (Ctrl + X e depois Y).
 
-![Instalando MSYS2 1](media/msys2_1.png)
+  Para aplicar as alterações feche e abra o terminal ou digite:
 
-Ao ver essa mensagem, feche o terminal e abra novamente.
+  ```bash
+  source ~/.config/fish/config.fish
+  ```
 
-![Instalando MSYS2 2](media/msys2_2.png)
+## Criando variáveis no PATH
 
-Depois da etapa 6, instale as ferramentas de desenvolvimento que vamos precisar:
-gcc, make e git.
+Além de colocar caminhos para diretórios no PATH, é possível dar nome a 
+eles, possibilitando fazer chamadas do diretório desejado usando somente o nome da 
+variável que você definiu para o caminho até esse diretório.
 
-Para instalar um pacote no MSYS2, utilizamos o comando com a seguinte forma
-geral: pacman -S <pacote_1> <pacote_2> … <pacote_N>. Portanto, para instalar gcc
-e make, utilizamos o comando pacman -S gcc make. Ao digitar isso no terminal do
-MSYS2 e apertar Enter, o processo de instalação dessas ferramentas irá começar,
-podendo observar o progresso pelo terminal do MSYS2. Após terminar, feche o
-terminal.
+>[!NOTE]
+>Para criar variáveis no PATH do WSL de programas que estão instalados no Windows, 
+>é necessário acrescentar `/mnt/c/` no começo do caminho do diretório para 
+>identificar que o arquivo está instalado no Windows e não no ambiente Linux 
+>do WSL.
 
-Para podermos utilizar as ferramentas que instalamos pelo MSYS2 pelo Prompt de
-Comando do Windows, precisamos adicionar o local dos executáveis do MSYS2 na
-variável PATH. Esse local, em uma instalação do MSYS2 padrão, é
-`C:\msys64\usr\bin`. Coloque esse caminho na variável PATH conforme mostrado na
-seção anterior. Deixe esse caminho como primeiro item na lista para ter
-prioridade sobre outras versões de gcc ou make que possam eventualmente existir
-no seu computador.
+O procedimento é parecido com colocar apenas caminhos no PATH.
 
-![Instalando MSYS2 3](media/msys2_3.png)
+- **Bash**:
 
-Para verificar se a instalação foi feita corretamente, abra o Prompt de Comando
-do Windows e digite `gcc -v` para verificar se o gcc foi instalado e `make -v`
-para verificar se o make foi instalado. A saída esperada no terminal ao executar
-esses comando são mostrados na imagem abaixo (podem haver algumas pequenas
-diferenças nas saídas).
+  Abra o .bashrc
 
-![Instalando MSYS2 4](media/msys2_4.png)
+  ```bash
+  code ~/.bashrc
+  ```
 
-Se a saída no Prompt de Comando foi parecida com essa, pronto. Você terminou de
-instalar as ferramentas do MSYS2 que utilizamos.
+  Adicione a seguinte linha no final:
 
-    
+  ```bash
+  export NOME_DA_VARIAVEL="/caminho/do/diretorio"
+  ```
+
+  Salve o arquivo.
+
+  Para aplicar as alterações feche e abra o terminal ou digite:
+
+  ```bash
+  source ~/.bashrc
+  ```
+
+  Exemplo de declaração do **CUBE_PATH**:
+
+  ```bash
+  export CUBE_PATH="/home/eu/STM32CubeMX"
+  ```
+
+- **Fish**:
+
+  ```bash
+  nano ~/.config/fish/config.fish
+  ```
+
+  Crie a variável:
+
+  ```bash
+  set -gx NOME_DA_VARIAVEL "caminho/do/diretorio"
+  ```
+
+  Coloque no PATH:
+
+  ```bash
+  set -gx PATH $PATH $NOME_DA_VARIAVEL
+  ```
+
+  Salve o arquivo (Ctrl + X e depois Y).
+
+  Para aplicar as alterações feche e abra o terminal ou digite:
+
+  ```bash
+  source ~/.config/fish/config.fish
+  ```
+
 ## Habilitando a virtualização na BIOS   
 Para que seja possível a instalação do WSL, primeiro é necessário que a virtualização da BIOS/UEFI esteja habilitada. A virtualização permite que o seu dispositivo Windows emule um sistema operativo diferente, como Android ou Linux. 
 Para saber este status na sua máquina, abra o gerenciador de tarefas, vá para desempenho e olhe naquelas informações ali em baixo:
 
 ![virtualização ON](https://github.com/user-attachments/assets/4109eded-9a59-48f6-bf46-1b09f19a6374)
 
-Se já está habilitado, prossiga para o passo 1 da [instalação do WSL](#wsl). 
+Se já está habilitado, prossiga para o passo 1 da [instalação do WSL](#windows-subsystem-for-linux). 
 Caso contrário, acesse este [guia](https://support.microsoft.com/pt-br/windows/ativar-a-virtualiza%C3%A7%C3%A3o-no-windows-c5578302-6e43-4b4b-a449-8ced115f58e1) da Microsoft pelo seu celular e siga o passo a passo no seu computador.
 
 >[!Warning] 
 >Será necessário fazer alterações na sua UEFI/BIOS. Caso não esteja acostumado com isso, peça ajuda aos veteranos.
     
-Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior. Se deu tudo certo, prossiga para a [instalação do WSL](#wsl).
+Depois de seguir o guia da Microsoft, verifique novamente se a virtualização está habilitado como mostra a foto anterior. Se deu tudo certo, prossiga para a [instalação do WSL](#windows-subsystem-for-linux).
 
 >Voltar para o [índice](#Índice)    
